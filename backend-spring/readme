@@ -1,3 +1,4 @@
+说明：
 1、端口占用：
 C:\WINDOWS\system32> netstat -ano | findstr :6200
   TCP    0.0.0.0:6200           0.0.0.0:0              LISTENING       29444
@@ -5,3 +6,4 @@ C:\WINDOWS\system32> netstat -ano | findstr :6200
 
 C:\WINDOWS\system32> taskkill /F /PID 29444
   成功: 已终止 PID 为 29444 的进程
+
