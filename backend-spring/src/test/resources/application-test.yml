@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  sql:
+    init:
+      mode: never
+
+jwt:
+  secret: test-secret-must-be-at-least-32-characters-long
+  access-token-expiration: 7200000
+  refresh-token-expiration: 2592000000
+
+oauth:
+  wechat:
+    app-id: test-wechat-app-id
+    app-secret: test-wechat-app-secret
+    redirect-uri: http://localhost:5173/oauth/callback
+  dingtalk:
+    app-id: test-dingtalk-app-id
+    app-secret: test-dingtalk-app-secret
+    redirect-uri: http://localhost:5173/oauth/callback
+
+upload:
+  dir: ./test-uploads
+  max-size: 10485760

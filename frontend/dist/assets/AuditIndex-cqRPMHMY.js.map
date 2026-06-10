@@ -1,0 +1,1 @@
+{"version":3,"file":"AuditIndex-cqRPMHMY.js","names":[],"sources":["../../src/pages/audit/AuditIndex.vue"],"sourcesContent":["<template>\n  <div class=\"audit-index\">\n    <router-view />\n  </div>\n</template>\n"],"mappings":"oIACO,MAAM,cAAa,mDAAxB,EAEM,MAFN,EAEM,CADJ,EAAe,EAAA,CAAA,CAAA"}

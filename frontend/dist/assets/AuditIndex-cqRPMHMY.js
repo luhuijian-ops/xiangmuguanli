@@ -1,0 +1,2 @@
+import{B as e,I as t,_ as n,p as r}from"./runtime-core.esm-bundler-C6LkvM2N.js";import{y as i}from"./index-BXfna7hK.js";var a={},o={class:`audit-index`};function s(i,a){let s=e(`router-view`);return t(),r(`div`,o,[n(s)])}var c=i(a,[[`render`,s]]);export{c as default};
+//# sourceMappingURL=AuditIndex-cqRPMHMY.js.map

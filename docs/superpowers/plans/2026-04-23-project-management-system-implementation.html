@@ -1,0 +1,4592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目管理系统实现计划</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            color: #3498db;
+        }
+
+        h2 {
+            font-size: 2em;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #34495e;
+        }
+
+        h4 {
+            font-size: 1.3em;
+        }
+
+        p {
+            margin: 10px 0;
+            font-size: 1em;
+            line-height: 1.8;
+        }
+
+        blockquote {
+            background: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 10px 20px;
+            margin: 15px 0;
+            color: #555;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: #e74c3c;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .code-header {
+            background: #1e1e1e;
+            padding: 8px 15px;
+            color: #888;
+            font-size: 0.85em;
+            border-bottom: 1px solid #3d3d3d;
+        }
+
+        .code-block pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .task-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: not-allowed;
+        }
+
+        .task-item span {
+            flex: 1;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #e0e0e0;
+            margin: 30px 0;
+        }
+
+        .step-title {
+            background: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        strong {
+            color: #2c3e50;
+        }
+
+        /* 打印样式 */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            .code-block {
+                break-inside: avoid;
+            }
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            h3 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>项目管理系统实现计划</h1>
+<br>
+<blockquote><strong>For agentic workers:</strong> REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (<code>- [ ]</code>) syntax for tracking.</blockquote>
+<br>
+<p><strong>目标</strong>: 构建一个支持微信/钉钉登录的轻量级项目管理系统，包含任务管理、项目规划、团队协作、统计报表和日程管理功能</p>
+<br>
+<p><strong>架构</strong>: 低代码平台 + MySQL后端 + OAuth2.0认证，采用模块化设计，前后端分离，RESTful API接口</p>
+<br>
+<p><strong>技术栈</strong>: Node.js/Express + MySQL + Prisma ORM + React + 微信/钉钉OAuth2.0</p>
+<br>
+<hr>
+<br>
+<h2>项目文件结构</h2>
+<br>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">xiangmuguanli/
+├── backend/                          # 后端服务
+│   ├── src/
+│   │   ├── config/                   # 配置文件
+│   │   │   ├── database.ts
+│   │   │   ├── jwt.ts
+│   │   │   ├── oauth.ts              # 微信/钉钉配置
+│   │   │   └── index.ts
+│   │   ├── controllers/              # 控制器
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── project.controller.ts
+│   │   │   ├── task.controller.ts
+│   │   │   ├── file.controller.ts
+│   │   │   ├── comment.controller.ts
+│   │   │   ├── stats.controller.ts
+│   │   │   └── event.controller.ts
+│   │   ├── services/                 # 业务逻辑
+│   │   │   ├── auth.service.ts       # 认证服务（微信/钉钉）
+│   │   │   ├── project.service.ts
+│   │   │   ├── task.service.ts
+│   │   │   ├── file.service.ts
+│   │   │   ├── comment.service.ts
+│   │   │   ├── stats.service.ts
+│   │   │   └── event.service.ts
+│   │   ├── middleware/               # 中间件
+│   │   │   ├── auth.middleware.ts   # JWT认证
+│   │   │   ├── permission.middleware.ts
+│   │   │   ├── error.middleware.ts
+│   │   │   └── logger.middleware.ts
+│   │   ├── routes/                   # 路由
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── project.routes.ts
+│   │   │   ├── task.routes.ts
+│   │   │   ├── file.routes.ts
+│   │   │   ├── comment.routes.ts
+│   │   │   ├── stats.routes.ts
+│   │   │   ├── event.routes.ts
+│   │   │   └── index.ts
+│   │   ├── models/                   # Prisma模型
+│   │   │   └── schema.prisma
+│   │   ├── utils/                    # 工具函数
+│   │   │   ├── crypto.utils.ts
+│   │   │   ├── date.utils.ts
+│   │   │   └── response.utils.ts
+│   │   ├── types/                    # TypeScript类型
+│   │   │   └── index.ts
+│   │   └── server.ts                 # 服务器入口
+│   ├── tests/                        # 测试文件
+│   │   ├── unit/                     # 单元测试
+│   │   │   ├── auth.service.test.ts
+│   │   │   ├── project.service.test.ts
+│   │   │   └── task.service.test.ts
+│   │   └── integration/             # 集成测试
+│   │       └── api.test.ts
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── .env.example
+├── frontend/                         # 前端应用
+│   ├── src/
+│   │   ├── components/               # 组件
+│   │   │   ├── common/               # 通用组件
+│   │   │   │   ├── Button.tsx
+│   │   │   │   ├── Modal.tsx
+│   │   │   │   └── Table.tsx
+│   │   │   ├── auth/                 # 认证组件
+│   │   │   │   ├── Login.tsx
+│   │   │   │   └── OAuthButton.tsx
+│   │   │   ├── project/              # 项目组件
+│   │   │   │   ├── ProjectList.tsx
+│   │   │   │   ├── ProjectCard.tsx
+│   │   │   │   ├── GanttChart.tsx
+│   │   │   │   └── MilestoneList.tsx
+│   │   │   ├── task/                 # 任务组件
+│   │   │   │   ├── TaskBoard.tsx
+│   │   │   │   ├── TaskList.tsx
+│   │   │   │   ├── TaskCard.tsx
+│   │   │   │   └── TaskForm.tsx
+│   │   │   ├── collaboration/        # 协作组件
+│   │   │   │   ├── CommentList.tsx
+│   │   │   │   ├── FileUpload.tsx
+│   │   │   │   └── ActivityFeed.tsx
+│   │   │   ├── stats/                # 统计组件
+│   │   │   │   ├── ProjectStats.tsx
+│   │   │   │   ├── MemberStats.tsx
+│   │   │   │   └── ChartWrapper.tsx
+│   │   │   └── schedule/             # 日程组件
+│   │   │       ├── Calendar.tsx
+│   │   │       ├── EventList.tsx
+│   │   │       └── EventForm.tsx
+│   │   ├── pages/                    # 页面
+│   │   │   ├── Login.tsx
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── ProjectDetail.tsx
+│   │   │   └── TaskDetail.tsx
+│   │   ├── hooks/                    # React Hooks
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useProjects.ts
+│   │   │   ├── useTasks.ts
+│   │   │   └── useEvents.ts
+│   │   ├── services/                 # API服务
+│   │   │   ├── api.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── project.service.ts
+│   │   │   ├── task.service.ts
+│   │   │   └── event.service.ts
+│   │   ├── store/                    # 状态管理
+│   │   │   ├── index.ts
+│   │   │   └── modules/
+│   │   │       ├── auth.ts
+│   │   │       ├── project.ts
+│   │   │       └── task.ts
+│   │   ├── types/                    # TypeScript类型
+│   │   │   └── index.ts
+│   │   ├── utils/                    # 工具函数
+│   │   │   ├── date.utils.ts
+│   │   │   └── validation.utils.ts
+│   │   └── main.tsx                  # 应用入口
+│   ├── tests/                        # 测试文件
+│   │   ├── components/
+│   │   │   └── auth/
+│   │   │       └── Login.test.tsx
+│   │   └── hooks/
+│   │       └── useAuth.test.ts
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── vite.config.ts
+├── docs/                             # 文档
+│   ├── api/                          # API文档
+│   ├── database/                     # 数据库文档
+│   └── deployment/                    # 部署文档
+├── docker/                           # Docker配置
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── mysql/
+│       └── init.sql
+├── .gitignore
+└── README.md
+</pre></div>
+<br>
+<hr>
+<br>
+<h2>第一阶段：项目初始化与数据库设计（2周）</h2>
+<br>
+<hr>
+<br>
+<h3>Task 1: 初始化Git仓库</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>.gitignore</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建 .gitignore 文件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>bash</span></div><pre class="language-bash"># Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build
+dist/
+build/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 初始化Git仓库</strong></li>
+<br>
+<p>Run: <code>git init</code></p>
+<p>Expected: Initialized empty Git repository</p>
+<br>
+<li>[ ] <strong>Step 3: 提交初始提交</strong></li>
+<br>
+<p>Run: <code>git add .gitignore && git commit -m "chore: initialize git repository with gitignore"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 2: 初始化后端项目</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/package.json</code></li>
+<li>Create: <code>backend/tsconfig.json</code></li>
+<li>Create: <code>backend/.env.example</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建后端 package.json</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>json</span></div><pre class="language-json">{
+  &quot;name&quot;: &quot;project-management-backend&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;Project Management System Backend&quot;,
+  &quot;main&quot;: &quot;dist/server.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;dev&quot;: &quot;nodemon src/server.ts&quot;,
+    &quot;build&quot;: &quot;tsc&quot;,
+    &quot;start&quot;: &quot;node dist/server.js&quot;,
+    &quot;test&quot;: &quot;jest&quot;,
+    &quot;test:watch&quot;: &quot;jest --watch&quot;,
+    &quot;prisma:generate&quot;: &quot;prisma generate&quot;,
+    &quot;prisma:migrate&quot;: &quot;prisma migrate dev&quot;,
+    &quot;prisma:studio&quot;: &quot;prisma studio&quot;
+  },
+  &quot;dependencies&quot;: {
+    &quot;express&quot;: &quot;^4.18.2&quot;,
+    &quot;cors&quot;: &quot;^2.8.5&quot;,
+    &quot;dotenv&quot;: &quot;^16.3.1&quot;,
+    &quot;jsonwebtoken&quot;: &quot;^9.0.2&quot;,
+    &quot;bcrypt&quot;: &quot;^5.1.1&quot;,
+    &quot;axios&quot;: &quot;^1.6.0&quot;,
+    &quot;@prisma/client&quot;: &quot;^5.7.0&quot;,
+    &quot;multer&quot;: &quot;^1.4.5-lts.1&quot;,
+    &quot;helmet&quot;: &quot;^7.1.0&quot;,
+    &quot;express-rate-limit&quot;: &quot;^7.1.4&quot;
+  },
+  &quot;devDependencies&quot;: {
+    &quot;@types/express&quot;: &quot;^4.17.21&quot;,
+    &quot;@types/node&quot;: &quot;^20.10.5&quot;,
+    &quot;@types/cors&quot;: &quot;^2.8.17&quot;,
+    &quot;@types/jsonwebtoken&quot;: &quot;^9.0.5&quot;,
+    &quot;@types/bcrypt&quot;: &quot;^5.1.1&quot;,
+    &quot;@types/multer&quot;: &quot;^1.4.11&quot;,
+    &quot;@types/jest&quot;: &quot;^29.5.11&quot;,
+    &quot;typescript&quot;: &quot;^5.3.3&quot;,
+    &quot;nodemon&quot;: &quot;^3.0.2&quot;,
+    &quot;ts-node&quot;: &quot;^10.9.2&quot;,
+    &quot;jest&quot;: &quot;^29.7.0&quot;,
+    &quot;ts-jest&quot;: &quot;^29.1.1&quot;,
+    &quot;prisma&quot;: &quot;^5.7.0&quot;
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建 tsconfig.json</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>json</span></div><pre class="language-json">{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES2020&quot;,
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;lib&quot;: [&quot;ES2020&quot;],
+    &quot;outDir&quot;: &quot;./dist&quot;,
+    &quot;rootDir&quot;: &quot;./src&quot;,
+    &quot;strict&quot;: true,
+    &quot;esModuleInterop&quot;: true,
+    &quot;skipLibCheck&quot;: true,
+    &quot;forceConsistentCasingInFileNames&quot;: true,
+    &quot;resolveJsonModule&quot;: true,
+    &quot;moduleResolution&quot;: &quot;node&quot;,
+    &quot;declaration&quot;: true,
+    &quot;declarationMap&quot;: true,
+    &quot;sourceMap&quot;: true
+  },
+  &quot;include&quot;: [&quot;src/**/*&quot;],
+  &quot;exclude&quot;: [&quot;node_modules&quot;, &quot;dist&quot;, &quot;**/*.test.ts&quot;]
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 创建 .env.example</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>bash</span></div><pre class="language-bash"># Server
+PORT=3000
+NODE_ENV=development
+
+# Database
+DATABASE_URL=&quot;mysql://root:password@localhost:3306/project_management&quot;
+
+# JWT
+JWT_SECRET=your_jwt_secret_key_here
+JWT_EXPIRES_IN=2h
+JWT_REFRESH_EXPIRES_IN=30d
+
+# OAuth - WeChat
+WECHAT_APP_ID=your_wechat_app_id
+WECHAT_APP_SECRET=your_wechat_app_secret
+WECHAT_REDIRECT_URI=http://localhost:3000/api/v1/auth/wechat/callback
+
+# OAuth - DingTalk
+DINGTALK_APP_ID=your_dingtalk_app_id
+DINGTALK_APP_SECRET=your_dingtalk_app_secret
+DINGTALK_REDIRECT_URI=http://localhost:3000/api/v1/auth/dingtalk/callback
+
+# File Upload
+MAX_FILE_SIZE=10485760
+UPLOAD_DIR=./uploads
+
+# Rate Limit
+RATE_LIMIT_WINDOW=15
+RATE_LIMIT_MAX=100
+</pre></div>
+<br>
+<li>[ ] <strong>Step 4: 安装依赖</strong></li>
+<br>
+<p>Run: <code>cd backend && npm install</code></p>
+<p>Expected: Dependencies installed successfully</p>
+<br>
+<li>[ ] <strong>Step 5: 提交代码</strong></li>
+<br>
+<p>Run: <code>cd .. && git add backend && git commit -m "feat: initialize backend project with TypeScript"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 3: 配置Prisma ORM</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/models/schema.prisma</code></li>
+<li>Create: <code>backend/src/config/database.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建 Prisma schema</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>prisma</span></div><pre class="language-prisma">// backend/src/models/schema.prisma
+
+generator client {
+  provider = &quot;prisma-client-js&quot;
+}
+
+datasource db {
+  provider = &quot;mysql&quot;
+  url      = env(&quot;DATABASE_URL&quot;)
+}
+
+model User {
+  id        BigInt   @id @default(autoincrement())
+  username  String?  @unique
+  email     String?  @unique
+  avatar    String?
+  name      String
+  phone     String?
+  status    UserStatus @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdTasks       Task[]      @relation(&quot;TaskCreator&quot;)
+  assignedTasks      Task[]      @relation(&quot;TaskAssignee&quot;)
+  ownedProjects      Project[]   @relation(&quot;ProjectOwner&quot;)
+  projectMemberships ProjectMember[]
+  bindings           UserBinding[]
+  comments           Comment[]
+  activities         Activity[]
+  uploadedFiles      File[]
+  workHours          WorkHour[]
+  roles              UserRole[]
+  events             Event[]
+  loginLogs          LoginLog[]
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+model UserBinding {
+  id        BigInt          @id @default(autoincrement())
+  userId    BigInt
+  platform  OAuthPlatform
+  openId    String
+  unionId   String?
+  nickname  String?
+  avatar    String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([platform, openId])
+  @@index([platform, openId])
+}
+
+enum OAuthPlatform {
+  WECHAT
+  DINGTALK
+}
+
+model Project {
+  id        BigInt        @id @default(autoincrement())
+  name      String
+  description String?
+  code      String        @unique
+  ownerId   BigInt
+  status    ProjectStatus @default(ACTIVE)
+  startDate DateTime?
+  endDate   DateTime?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  owner       User             @relation(&quot;ProjectOwner&quot;, fields: [ownerId], references: [id])
+  members     ProjectMember[]
+  tasks       Task[]
+  milestones  Milestone[]
+  files       File[]
+  activities  Activity[]
+  workHours   WorkHour[]
+  events      Event[]
+  comments    Comment[]
+  userRoles   UserRole[]
+}
+
+enum ProjectStatus {
+  ACTIVE
+  ARCHIVED
+  DELETED
+}
+
+model ProjectMember {
+  id        BigInt         @id @default(autoincrement())
+  projectId BigInt
+  userId    BigInt
+  role      MemberRole     @default(MEMBER)
+  joinedAt  DateTime       @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+model Task {
+  id          BigInt      @id @default(autoincrement())
+  title       String
+  description String?
+  projectId   BigInt
+  assignedTo  BigInt?
+  createdBy   BigInt
+  status      TaskStatus  @default(TODO)
+  priority    Int         @default(3)
+  dueDate     DateTime?
+  startDate   DateTime?
+  tags        String?
+  attachments String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  project        Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignedUser   User?        @relation(&quot;TaskAssignee&quot;, fields: [assignedTo], references: [id])
+  createdByUser  User         @relation(&quot;TaskCreator&quot;, fields: [createdBy], references: [id])
+  comments       Comment[]
+  activities     Activity[]
+  workHours      WorkHour[]
+  events         Event[]
+
+  @@index([projectId])
+  @@index([assignedTo])
+  @@index([status])
+  @@index([dueDate])
+}
+
+enum TaskStatus {
+  TODO
+  DOING
+  DONE
+  ARCHIVED
+}
+
+model Milestone {
+  id          BigInt            @id @default(autoincrement())
+  projectId   BigInt
+  name        String
+  description String?
+  dueDate     DateTime
+  status      MilestoneStatus   @default(PENDING)
+  orderIndex  Int               @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+enum MilestoneStatus {
+  PENDING
+  COMPLETED
+}
+
+model File {
+  id          BigInt   @id @default(autoincrement())
+  name        String
+  path        String
+  size        BigInt
+  type        String
+  uploadedBy  BigInt
+  taskId      BigInt?
+  projectId   BigInt?
+  createdAt   DateTime @default(now())
+
+  uploader User     @relation(fields: [uploadedBy], references: [id])
+  task     Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  project  Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id          BigInt   @id @default(autoincrement())
+  content     String
+  entityType  String
+  entityId    BigInt
+  userId      BigInt
+  parentId    BigInt?
+  mentions    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent   Comment?  @relation(&quot;CommentReplies&quot;, fields: [parentId], references: [id])
+  replies  Comment[] @relation(&quot;CommentReplies&quot;)
+
+  @@index([entityType, entityId])
+}
+
+model Activity {
+  id         BigInt   @id @default(autoincrement())
+  userId     BigInt
+  action     String
+  entityType String
+  entityId   BigInt
+  projectId  BigInt?
+  metadata   String?
+  createdAt  DateTime @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model WorkHour {
+  id          BigInt   @id @default(autoincrement())
+  userId      BigInt
+  taskId      BigInt?
+  projectId   BigInt?
+  hours       Decimal  @db.Decimal(5, 2)
+  date        DateTime
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task    Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@index([projectId])
+}
+
+model Event {
+  id               BigInt    @id @default(autoincrement())
+  title            String
+  description      String?
+  location         String?
+  userId           BigInt
+  projectId        BigInt?
+  taskId           BigInt?
+  startTime        DateTime
+  endTime          DateTime
+  allDay           Boolean   @default(false)
+  reminderMinutes  Int       @default(0)
+  repeatRule       String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  task    Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startTime])
+}
+
+model Role {
+  id          BigInt   @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  permissions String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userRoles UserRole[]
+}
+
+model UserRole {
+  id        BigInt   @id @default(autoincrement())
+  userId    BigInt
+  roleId    BigInt
+  projectId BigInt?
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role    Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model LoginLog {
+  id      BigInt       @id @default(autoincrement())
+  userId  BigInt
+  ip      String?
+  device  String?
+  success Boolean      @default(true)
+  platform String?
+  createdAt DateTime    @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建数据库配置文件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/config/database.ts
+import { PrismaClient } from &#039;@prisma/client&#039;;
+
+class Database {
+  private static instance: PrismaClient;
+
+  public static getInstance(): PrismaClient {
+    if (!Database.instance) {
+      Database.instance = new PrismaClient({
+        log: process.env.NODE_ENV === &#039;development&#039; ? [&#039;query&#039;, &#039;error&#039;, &#039;warn&#039;] : [&#039;error&#039;],
+      });
+    }
+
+    return Database.instance;
+  }
+
+  public static async connect(): Promise&lt;void&gt; {
+    try {
+      await Database.getInstance().$connect();
+      console.log(&#039;Database connected successfully&#039;);
+    } catch (error) {
+      console.error(&#039;Database connection failed:&#039;, error);
+      process.exit(1);
+    }
+  }
+
+  public static async disconnect(): Promise&lt;void&gt; {
+    await Database.getInstance().$disconnect();
+  }
+}
+
+export const prisma = Database.getInstance();
+export { Database };
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 生成 Prisma Client</strong></li>
+<br>
+<p>Run: <code>cd backend && npx prisma generate</code></p>
+<p>Expected: Prisma Client generated</p>
+<br>
+<li>[ ] <strong>Step 4: 提交代码</strong></li>
+<br>
+<p>Run: <code>cd .. && git add backend/src/models backend/src/config && git commit -m "feat: configure Prisma ORM with database schema"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 4: 创建配置管理模块</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/config/index.ts</code></li>
+<li>Create: <code>backend/src/config/jwt.ts</code></li>
+<li>Create: <code>backend/src/config/oauth.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建配置入口文件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/config/index.ts
+import dotenv from &#039;dotenv&#039;;
+
+dotenv.config();
+
+export const config = {
+  port: parseInt(process.env.PORT || &#039;3000&#039;, 10),
+  nodeEnv: process.env.NODE_ENV || &#039;development&#039;,
+  database: {
+    url: process.env.DATABASE_URL || &#039;&#039;,
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET || &#039;default-secret-change-in-production&#039;,
+    expiresIn: process.env.JWT_EXPIRES_IN || &#039;2h&#039;,
+    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || &#039;30d&#039;,
+  },
+  oauth: {
+    wechat: {
+      appId: process.env.WECHAT_APP_ID || &#039;&#039;,
+      appSecret: process.env.WECHAT_APP_SECRET || &#039;&#039;,
+      redirectUri: process.env.WECHAT_REDIRECT_URI || &#039;&#039;,
+    },
+    dingtalk: {
+      appId: process.env.DINGTALK_APP_ID || &#039;&#039;,
+      appSecret: process.env.DINGTALK_APP_SECRET || &#039;&#039;,
+      redirectUri: process.env.DINGTALK_REDIRECT_URI || &#039;&#039;,
+    },
+  },
+  upload: {
+    maxSize: parseInt(process.env.MAX_FILE_SIZE || &#039;10485760&#039;, 10),
+    dir: process.env.UPLOAD_DIR || &#039;./uploads&#039;,
+  },
+  rateLimit: {
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW || &#039;15&#039;, 10) * 60 * 1000,
+    max: parseInt(process.env.RATE_LIMIT_MAX || &#039;100&#039;, 10),
+  },
+} as const;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建JWT配置文件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/config/jwt.ts
+import jwt from &#039;jsonwebtoken&#039;;
+import { config } from &#039;./index&#039;;
+
+export interface JwtPayload {
+  userId: string;
+  username?: string;
+}
+
+export const generateAccessToken = (payload: JwtPayload): string =&gt; {
+  return jwt.sign(payload, config.jwt.secret, {
+    expiresIn: config.jwt.expiresIn,
+  });
+};
+
+export const generateRefreshToken = (payload: JwtPayload): string =&gt; {
+  return jwt.sign(payload, config.jwt.secret, {
+    expiresIn: config.jwt.refreshExpiresIn,
+  });
+};
+
+export const verifyToken = (token: string): JwtPayload =&gt; {
+  return jwt.verify(token, config.jwt.secret) as JwtPayload;
+};
+
+export const decodeToken = (token: string): JwtPayload | null =&gt; {
+  try {
+    return jwt.decode(token) as JwtPayload;
+  } catch {
+    return null;
+  }
+};
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 创建OAuth配置文件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/config/oauth.ts
+import axios from &#039;axios&#039;;
+import { config } from &#039;./index&#039;;
+
+export interface OAuthUser {
+  openId: string;
+  unionId?: string;
+  nickname: string;
+  avatar: string;
+}
+
+export interface WeChatAuthResponse {
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
+  openid: string;
+  scope: string;
+  unionid?: string;
+  errcode?: number;
+  errmsg?: string;
+}
+
+export interface DingTalkAuthResponse {
+  access_token: string;
+  expires_in: number;
+  errcode?: number;
+  errmsg?: string;
+}
+
+export class WeChatOAuth {
+  private appId = config.oauth.wechat.appId;
+  private appSecret = config.oauth.wechat.appSecret;
+
+  getAuthUrl(state: string = &#039;state&#039;): string {
+    return `https://open.weixin.qq.com/connect/qrconnect?appid=${this.appId}&amp;redirect_uri=${encodeURIComponent(config.oauth.wechat.redirectUri)}&amp;response_type=code&amp;scope=snsapi_login&amp;state=${state}#wechat_redirect`;
+  }
+
+  async getAccessToken(code: string): Promise&lt;WeChatAuthResponse&gt; {
+    const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${this.appId}&amp;secret=${this.appSecret}&amp;code=${code}&amp;grant_type=authorization_code`;
+    const response = await axios.get(url);
+    return response.data;
+  }
+
+  async getUserInfo(accessToken: string, openId: string): Promise&lt;OAuthUser&gt; {
+    const url = `https://api.weixin.qq.com/sns/userinfo?access_token=${accessToken}&amp;openid=${openId}`;
+    const response = await axios.get(url);
+
+    return {
+      openId: response.data.openid,
+      unionId: response.data.unionid,
+      nickname: response.data.nickname,
+      avatar: response.data.headimgurl,
+    };
+  }
+}
+
+export class DingTalkOAuth {
+  private appId = config.oauth.dingtalk.appId;
+  private appSecret = config.oauth.dingtalk.appSecret;
+
+  getAuthUrl(state: string = &#039;state&#039;): string {
+    return `https://login.dingtalk.com/oauth2/auth?redirect_uri=${encodeURIComponent(config.oauth.dingtalk.redirectUri)}&amp;response_type=code&amp;client_id=${this.appId}&amp;scope=openid&amp;state=${state}&amp;prompt=consent`;
+  }
+
+  async getAccessToken(code: string): Promise&lt;DingTalkAuthResponse&gt; {
+    const url = `https://api.dingtalk.com/v1.0/oauth2/userAccessToken`;
+    const response = await axios.post(url, {
+      clientId: this.appId,
+      clientSecret: this.appSecret,
+      code: code,
+      grantType: &#039;authorization_code&#039;,
+    });
+    return response.data;
+  }
+
+  async getUserInfo(accessToken: string): Promise&lt;OAuthUser&gt; {
+    const url = `https://api.dingtalk.com/v1.0/contact/users/me`;
+    const response = await axios.get(url, {
+      headers: {
+        &#039;x-acs-dingtalk-access-token&#039;: accessToken,
+      },
+    });
+
+    return {
+      openId: response.data.openId,
+      unionId: response.data.unionId,
+      nickname: response.data.nick || response.data.name,
+      avatar: response.data.avatar,
+    };
+  }
+}
+
+export const weChatOAuth = new WeChatOAuth();
+export const dingTalkOAuth = new DingTalkOAuth();
+</pre></div>
+<br>
+<li>[ ] <strong>Step 4: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/config && git commit -m "feat: create configuration management module"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h2>Chunk 2: 认证模块（微信/钉钉登录）</h2>
+<br>
+<hr>
+<br>
+<h3>Task 5: 创建认证服务</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/services/auth.service.ts</code></li>
+<li>Create: <code>backend/src/services/auth.service.test.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 编写认证服务测试</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/services/auth.service.test.ts
+import { describe, it, expect, beforeEach, afterEach, vi } from &#039;@jest/globals&#039;;
+import { AuthService } from &#039;./auth.service&#039;;
+import { prisma } from &#039;../config/database&#039;;
+
+describe(&#039;AuthService&#039;, () =&gt; {
+  let authService: AuthService;
+
+  beforeEach(() =&gt; {
+    authService = new AuthService();
+  });
+
+  afterEach(() =&gt; {
+    vi.clearAllMocks();
+  });
+
+  describe(&#039;微信登录&#039;, () =&gt; {
+    it(&#039;应该成功创建新用户&#039;, async () =&gt; {
+      const mockUser = {
+        openId: &#039;test_open_id&#039;,
+        unionId: &#039;test_union_id&#039;,
+        nickname: &#039;测试用户&#039;,
+        avatar: &#039;https://test.com/avatar.jpg&#039;,
+      };
+
+      // Mock the findFirst to return null (user doesn&#039;t exist)
+      vi.spyOn(prisma.userBinding, &#039;findFirst&#039;).mockResolvedValue(null);
+
+      // Mock the create user
+      const createdUser = {
+        id: BigInt(1),
+        name: &#039;测试用户&#039;,
+        username: null,
+        email: null,
+        avatar: &#039;https://test.com/avatar.jpg&#039;,
+        phone: null,
+        status: &#039;ACTIVE&#039;,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      vi.spyOn(prisma.user, &#039;create&#039;).mockResolvedValue(createdUser as any);
+
+      const result = await authService.loginWithWeChat(mockUser);
+
+      expect(result).toBeDefined();
+      expect(result.userId).toBe(&#039;1&#039;);
+    });
+
+    it(&#039;应该成功返回已存在的用户&#039;, async () =&gt; {
+      const mockUser = {
+        openId: &#039;test_open_id&#039;,
+        unionId: &#039;test_union_id&#039;,
+        nickname: &#039;测试用户&#039;,
+        avatar: &#039;https://test.com/avatar.jpg&#039;,
+      };
+
+      // Mock the findFirst to return existing user
+      const existingBinding = {
+        id: BigInt(1),
+        userId: BigInt(1),
+        platform: &#039;WECHAT&#039;,
+        openId: &#039;test_open_id&#039;,
+        unionId: &#039;test_union_id&#039;,
+        nickname: &#039;测试用户&#039;,
+        avatar: &#039;https://test.com/avatar.jpg&#039;,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        user: {
+          id: BigInt(1),
+          name: &#039;测试用户&#039;,
+          username: null,
+          email: null,
+          avatar: &#039;https://test.com/avatar.jpg&#039;,
+          phone: null,
+          status: &#039;ACTIVE&#039;,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      };
+
+      vi.spyOn(prisma.userBinding, &#039;findFirst&#039;).mockResolvedValue(existingBinding as any);
+
+      const result = await authService.loginWithWeChat(mockUser);
+
+      expect(result).toBeDefined();
+      expect(result.userId).toBe(&#039;1&#039;);
+    });
+  });
+
+  describe(&#039;钉钉登录&#039;, () =&gt; {
+    it(&#039;应该成功创建新用户&#039;, async () =&gt; {
+      const mockUser = {
+        openId: &#039;test_open_id&#039;,
+        unionId: &#039;test_union_id&#039;,
+        nickname: &#039;测试用户&#039;,
+        avatar: &#039;https://test.com/avatar.jpg&#039;,
+      };
+
+      vi.spyOn(prisma.userBinding, &#039;findFirst&#039;).mockResolvedValue(null);
+
+      const createdUser = {
+        id: BigInt(1),
+        name: &#039;测试用户&#039;,
+        username: null,
+        email: null,
+        avatar: &#039;https://test.com/avatar.jpg&#039;,
+        phone: null,
+        status: &#039;ACTIVE&#039;,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      vi.spyOn(prisma.user, &#039;create&#039;).mockResolvedValue(createdUser as any);
+
+      const result = await authService.loginWithDingTalk(mockUser);
+
+      expect(result).toBeDefined();
+      expect(result.userId).toBe(&#039;1&#039;);
+    });
+  });
+
+  describe(&#039;Token管理&#039;, () =&gt; {
+    it(&#039;应该成功生成Access Token&#039;, () =&gt; {
+      const payload = { userId: &#039;1&#039; };
+      const token = authService.generateAccessToken(payload);
+
+      expect(token).toBeDefined();
+      expect(typeof token).toBe(&#039;string&#039;);
+    });
+
+    it(&#039;应该成功生成Refresh Token&#039;, () =&gt; {
+      const payload = { userId: &#039;1&#039; };
+      const token = authService.generateRefreshToken(payload);
+
+      expect(token).toBeDefined();
+      expect(typeof token).toBe(&#039;string&#039;);
+    });
+
+    it(&#039;应该成功验证Token&#039;, () =&gt; {
+      const payload = { userId: &#039;1&#039; };
+      const token = authService.generateAccessToken(payload);
+
+      const decoded = authService.verifyToken(token);
+
+      expect(decoded).toBeDefined();
+      expect(decoded.userId).toBe(&#039;1&#039;);
+    });
+  });
+});
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 运行测试（应该失败）</strong></li>
+<br>
+<p>Run: <code>cd backend && npm test -- services/auth.service.test.ts</code></p>
+<p>Expected: FAIL with service not defined</p>
+<br>
+<li>[ ] <strong>Step 3: 实现认证服务</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/services/auth.service.ts
+import { Prisma } from &#039;@prisma/client&#039;;
+import { prisma } from &#039;../config/database&#039;;
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyToken,
+  JwtPayload,
+} from &#039;../config/jwt&#039;;
+
+export interface OAuthUser {
+  openId: string;
+  unionId?: string;
+  nickname: string;
+  avatar: string;
+}
+
+export interface LoginResult {
+  userId: string;
+  accessToken: string;
+  refreshToken: string;
+  user: {
+    id: string;
+    name: string;
+    avatar?: string;
+    email?: string;
+  };
+}
+
+export class AuthService {
+  async findOrCreateUser(
+    platform: &#039;WECHAT&#039; | &#039;DINGTALK&#039;,
+    oauthUser: OAuthUser
+  ): Promise&lt;LoginResult&gt; {
+    // 查找是否已存在该绑定
+    const existingBinding = await prisma.userBinding.findFirst({
+      where: {
+        platform,
+        openId: oauthUser.openId,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    if (existingBinding) {
+      return this.generateLoginResult(existingBinding.user);
+    }
+
+    // 创建新用户
+    const user = await prisma.user.create({
+      data: {
+        name: oauthUser.nickname,
+        avatar: oauthUser.avatar,
+      },
+    });
+
+    // 创建绑定关系
+    await prisma.userBinding.create({
+      data: {
+        userId: user.id,
+        platform,
+        openId: oauthUser.openId,
+        unionId: oauthUser.unionId,
+        nickname: oauthUser.nickname,
+        avatar: oauthUser.avatar,
+      },
+    });
+
+    return this.generateLoginResult(user);
+  }
+
+  async loginWithWeChat(oauthUser: OAuthUser): Promise&lt;LoginResult&gt; {
+    return this.findOrCreateUser(&#039;WECHAT&#039;, oauthUser);
+  }
+
+  async loginWithDingTalk(oauthUser: OAuthUser): Promise&lt;LoginResult&gt; {
+    return this.findOrCreateUser(&#039;DINGTALK&#039;, oauthUser);
+  }
+
+  async refreshAccessToken(refreshToken: string): Promise&lt;LoginResult | null&gt; {
+    try {
+      const payload = verifyToken(refreshToken);
+
+      const user = await prisma.user.findUnique({
+        where: { id: BigInt(payload.userId) },
+      });
+
+      if (!user || user.status !== &#039;ACTIVE&#039;) {
+        return null;
+      }
+
+      return this.generateLoginResult(user);
+    } catch {
+      return null;
+    }
+  }
+
+  async logout(userId: string): Promise&lt;void&gt; {
+    // 记录登出日志
+    await prisma.loginLog.create({
+      data: {
+        userId: BigInt(userId),
+        success: true,
+        action: &#039;logout&#039;,
+      },
+    });
+  }
+
+  private generateLoginResult(user: any): LoginResult {
+    const payload: JwtPayload = {
+      userId: user.id.toString(),
+      username: user.username || undefined,
+    };
+
+    return {
+      userId: user.id.toString(),
+      accessToken: generateAccessToken(payload),
+      refreshToken: generateRefreshToken(payload),
+      user: {
+        id: user.id.toString(),
+        name: user.name,
+        avatar: user.avatar || undefined,
+        email: user.email || undefined,
+      },
+    };
+  }
+
+  generateAccessToken(payload: JwtPayload): string {
+    return generateAccessToken(payload);
+  }
+
+  generateRefreshToken(payload: JwtPayload): string {
+    return generateRefreshToken(payload);
+  }
+
+  verifyToken(token: string): JwtPayload {
+    return verifyToken(token);
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 4: 运行测试（应该通过）</strong></li>
+<br>
+<p>Run: <code>cd backend && npm test -- services/auth.service.test.ts</code></p>
+<p>Expected: PASS</p>
+<br>
+<li>[ ] <strong>Step 5: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/services && git commit -m "feat: implement auth service with WeChat/DingTalk login"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 6: 创建认证中间件</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/middleware/auth.middleware.ts</code></li>
+<li>Create: <code>backend/src/middleware/permission.middleware.ts</code></li>
+<li>Create: <code>backend/src/middleware/error.middleware.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建认证中间件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/middleware/auth.middleware.ts
+import { Request, Response, NextFunction } from &#039;express&#039;;
+import { verifyToken, JwtPayload } from &#039;../config/jwt&#039;;
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: JwtPayload;
+    }
+  }
+}
+
+export const authenticate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise&lt;void&gt; =&gt; {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith(&#039;Bearer &#039;)) {
+      res.status(401).json({
+        code: 401,
+        message: &#039;未提供认证令牌&#039;,
+      });
+      return;
+    }
+
+    const token = authHeader.substring(7);
+    const payload = verifyToken(token);
+
+    req.user = payload;
+    next();
+  } catch (error) {
+    res.status(401).json({
+      code: 401,
+      message: &#039;无效的认证令牌&#039;,
+    });
+  }
+};
+
+export const optionalAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise&lt;void&gt; =&gt; {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader &amp;&amp; authHeader.startsWith(&#039;Bearer &#039;)) {
+      const token = authHeader.substring(7);
+      const payload = verifyToken(token);
+      req.user = payload;
+    }
+
+    next();
+  } catch {
+    next();
+  }
+};
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建权限中间件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/middleware/permission.middleware.ts
+import { Request, Response, NextFunction } from &#039;express&#039;;
+import { prisma } from &#039;../config/database&#039;;
+
+export const checkProjectPermission = (
+  ...roles: string[]
+) =&gt; {
+  return async (req: Request, res: Response, next: NextFunction): Promise&lt;void&gt; =&gt; {
+    try {
+      if (!req.user) {
+        res.status(401).json({
+          code: 401,
+          message: &#039;未认证&#039;,
+        });
+        return;
+      }
+
+      const projectId = req.params.projectId || req.body.projectId;
+
+      if (!projectId) {
+        res.status(400).json({
+          code: 400,
+          message: &#039;缺少项目ID&#039;,
+        });
+        return;
+      }
+
+      const membership = await prisma.projectMember.findUnique({
+        where: {
+          projectId_userId: {
+            projectId: BigInt(projectId),
+            userId: BigInt(req.user.userId),
+          },
+        },
+      });
+
+      if (!membership) {
+        res.status(403).json({
+          code: 403,
+          message: &#039;无权限访问该项目&#039;,
+        });
+        return;
+      }
+
+      if (roles.length &gt; 0 &amp;&amp; !roles.includes(membership.role)) {
+        res.status(403).json({
+          code: 403,
+          message: &#039;权限不足&#039;,
+        });
+        return;
+      }
+
+      req.projectMembership = membership;
+      next();
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  };
+};
+
+declare global {
+  namespace Express {
+    interface Request {
+      projectMembership?: any;
+    }
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 创建错误处理中间件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/middleware/error.middleware.ts
+import { Request, Response, NextFunction } from &#039;express&#039;;
+
+export class AppError extends Error {
+  constructor(
+    public code: number,
+    public message: string,
+    public errors?: any[]
+  ) {
+    super(message);
+    this.name = &#039;AppError&#039;;
+  }
+}
+
+export const errorHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void =&gt; {
+  if (err instanceof AppError) {
+    res.status(err.code).json({
+      code: err.code,
+      message: err.message,
+      errors: err.errors,
+    });
+    return;
+  }
+
+  console.error(&#039;Error:&#039;, err);
+
+  res.status(500).json({
+    code: 500,
+    message: &#039;服务器内部错误&#039;,
+  });
+};
+
+export const notFoundHandler = (
+  req: Request,
+  res: Response
+): void =&gt; {
+  res.status(404).json({
+    code: 404,
+    message: &#039;接口不存在&#039;,
+  });
+};
+</pre></div>
+<br>
+<li>[ ] <strong>Step 4: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/middleware && git commit -m "feat: create auth and permission middleware"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 7: 创建认证路由和控制器</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/controllers/auth.controller.ts</code></li>
+<li>Create: <code>backend/src/routes/auth.routes.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建认证控制器</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/controllers/auth.controller.ts
+import { Request, Response, NextFunction } from &#039;express&#039;;
+import { AuthService } from &#039;../services/auth.service&#039;;
+import { weChatOAuth, dingTalkOAuth, OAuthUser } from &#039;../config/oauth&#039;;
+import { prisma } from &#039;../config/database&#039;;
+import { AppError } from &#039;../middleware/error.middleware&#039;;
+
+export class AuthController {
+  private authService = new AuthService();
+
+  // 获取微信登录URL
+  getWeChatAuthUrl(req: Request, res: Response): void {
+    const state = req.query.state as string || &#039;state&#039;;
+    const url = weChatOAuth.getAuthUrl(state);
+    res.json({ code: 200, message: &#039;success&#039;, data: { url } });
+  }
+
+  // 微信OAuth回调
+  async weChatCallback(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const { code } = req.query;
+
+      if (!code) {
+        throw new AppError(400, &#039;缺少授权码&#039;);
+      }
+
+      // 获取access token
+      const tokenResponse = await weChatOAuth.getAccessToken(code as string);
+
+      if (tokenResponse.errcode) {
+        throw new AppError(400, &#039;微信授权失败&#039;, [tokenResponse.errmsg]);
+      }
+
+      // 获取用户信息
+      const oauthUser = await weChatOAuth.getUserInfo(
+        tokenResponse.access_token,
+        tokenResponse.openid
+      );
+
+      // 登录或创建用户
+      const result = await this.authService.loginWithWeChat(oauthUser);
+
+      // 记录登录日志
+      await this.recordLoginLog(result.userId, &#039;WECHAT&#039;, req.ip);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: result });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+          errors: error.errors,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+&#039;        });
+      }
+    }
+  }
+
+  // 获取钉钉登录URL
+  getDingTalkAuthUrl(req: Request, res: Response): void {
+    const state = req.query.state as string || &#039;state&#039;;
+    const url = dingTalkOAuth.getAuthUrl(state);
+    res.json({ code: 200, message: &#039;success&#039;, data: { url } });
+  }
+
+  // 钉钉OAuth回调
+  async dingTalkCallback(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const { code } = req.query;
+
+      if (!code) {
+        throw new AppError(400, &#039;缺少授权码&#039;);
+      }
+
+      // 获取access token
+      const tokenResponse = await dingTalkOAuth.getAccessToken(code as string);
+
+      if (tokenResponse.errcode) {
+        throw new AppError(400, &#039;钉钉授权失败&#039;, [tokenResponse.errmsg]);
+      }
+
+      // 获取用户信息
+      const oauthUser = await dingTalkOAuth.getUserInfo(tokenResponse.access_token);
+
+      // 登录或创建用户
+      const result = await this.authService.loginWithDingTalk(oauthUser);
+
+      // 记录登录日志
+      await this.recordLoginLog(result.userId, &#039;DINGTALK&#039;, req.ip);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: result });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+          errors: error.errors,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  // 刷新Token
+  async refreshToken(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const { refreshToken } = req.body;
+
+      if (!refreshToken) {
+        throw new AppError(400, &#039;缺少刷新令牌&#039;);
+      }
+
+      const result = await this.authService.refreshAccessToken(refreshToken);
+
+      if (!result) {
+        throw new AppError(&#039;401&#039;, &#039;无效的刷新令牌&#039;);
+      }
+
+      res.json({ code: 200, message: &#039;success&#039;, data: result });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+          errors: error.errors,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  // 登出
+  async logout(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (req.user) {
+        await this.authService.logout(req.user.userId);
+      }
+
+      res.json({ code: 200, message: &#039;success&#039; });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+
+  // 获取当前用户信息
+  async getCurrentUser(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const user = await prisma.user.findUnique({
+        where: { id: BigInt(req.user.userId) },
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          email: true,
+          avatar: true,
+          phone: true,
+          createdAt: true,
+        },
+      });
+
+      if (!user) {
+        throw new AppError(404, &#039;用户不存在&#039;);
+      }
+
+      res.json({
+        code: 200,
+        message: &#039;success&#039;,
+        data: {
+          ...user,
+          id: user.id.toString(),
+        },
+      });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  private async recordLoginLog(
+    userId: string,
+    platform: string,
+    ip?: string
+  ): Promise&lt;void&gt; {
+    await prisma.loginLog.create({
+      data: {
+        userId: BigInt(userId),
+        platform,
+        ip,
+        success: true,
+      },
+    });
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建认证路由</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/routes/auth.routes.ts
+import { Router } from &#039;express&#039;;
+import { AuthController } from &#039;../controllers/auth.controller&#039;;
+import { authenticate } from &#039;../middleware/auth.middleware&#039;;
+
+const router = Router();
+const authController = new AuthController();
+
+// 公开路由
+router.get(&#039;/wechat/auth-url&#039;, authController.getWeChatAuthUrl.bind(authController));
+router.get(&#039;/wechat/callback&#039;, authController.weChatCallback.bind(authController));
+router.get(&#039;/dingtalk/auth-url&#039;, authController.getDingTalkAuthUrl.bind(authController));
+router.get(&#039;/dingtalk/callback&#039;, authController.dingTalkCallback.bind(authController));
+router.post(&#039;/refresh&#039;, authController.refreshToken.bind(authController));
+
+// 需要认证的路由
+router.post(&#039;/logout&#039;, authenticate, authController.logout.bind(authController));
+router.get(&#039;/me&#039;, authenticate, authController.getCurrentUser.bind(authController));
+
+export default router;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/controllers backend/src/routes && git commit -m "feat: implement auth routes and controllers"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h2>Chunk 3: 项目管理模块</h2>
+<br>
+<hr>
+<br>
+<h3>Task 8: 创建项目服务</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/services/project.service.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建项目服务</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/services/project.service.ts
+import { Prisma } from &#039;@prisma/client&#039;;
+import { prisma } from &#039;../config/database&#039;;
+
+export interface CreateProjectInput {
+  name: string;
+  description?: string;
+  code: string;
+  ownerId: string;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+export interface UpdateProjectInput {
+  name?: string;
+  description?: string;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+export interface AddMemberInput {
+  userId: string;
+  role: &#039;OWNER&#039; | &#039;ADMIN&#039; | &#039;MEMBER&#039; | &#039;VIEWER&#039;;
+}
+
+export class ProjectService {
+  async createProject(input: CreateProjectInput) {
+    const project = await prisma.project.create({
+      data: {
+        name: input.name,
+        description: input.description,
+        code: input.code,
+        ownerId: BigInt(input.ownerId),
+        startDate: input.startDate,
+        endDate: input.endDate,
+      },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    // 自动创建所有者成员
+    await prisma.projectMember.create({
+      data: {
+        projectId: project.id,
+        userId: project.ownerId,
+        role: &#039;OWNER&#039;,
+      },
+    });
+
+    return this.transformProject(project);
+  }
+
+  async getProjects(userId: string, page = 1, pageSize = 20) {
+    const skip = (page - 1) * pageSize;
+
+    const [projects, total] = await Promise.all([
+      prisma.project.findMany({
+        where: {
+          members: {
+            some: {
+              userId: BigInt(userId),
+            },
+          },
+        },
+        include: {
+          owner: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+            },
+          },
+          members: {
+            select: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  avatar: true,
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              tasks: true,
+            },
+          },
+        },
+        skip,
+        take: pageSize,
+        orderBy: {
+          createdAt: &#039;desc&#039;,
+        },
+      }),
+      prisma.project.count({
+        where: {
+          members: {
+            some: {
+              userId: BigInt(userId),
+            },
+          },
+        },
+      }),
+    ]);
+
+    return {
+      list: projects.map(this.transformProject),
+      total,
+      page,
+      pageSize,
+    };
+  }
+
+  async getProjectById(projectId: string, userId?: string) {
+    const project = await prisma.project.findUnique({
+      where: { id: BigInt(projectId) },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+                email: true,
+              },
+            },
+          },
+        },
+        tasks: {
+          where: {
+            status: {
+              not: &#039;ARCHIVED&#039;,
+            },
+          },
+          include: {
+            assignedUser: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: &#039;desc&#039;,
+          },
+        },
+        milestones: {
+          orderBy: {
+            dueDate: &#039;asc&#039;,
+          },
+        },
+        _count: {
+          select: {
+            tasks: true,
+            members: true,
+          },
+        },
+      },
+    });
+
+    if (!project) {
+      throw new Error(&#039;项目不存在&#039;);
+    }
+
+    // 检查用户权限
+    if (userId) {
+      const member = project.members.find(m =&gt; m.userId === BigInt(userId));
+      if (!member) {
+        throw new Error(&#039;无权限访问该项目&#039;);
+      }
+    }
+
+    return {
+      ...this.transformProject(project),
+      members: project.members.map(m =&gt; ({
+        ...m,
+        userId: m.userId.toString(),
+        user: {
+          ...m.user,
+          id: m.user.id.toString(),
+        },
+      })),
+      tasks: project.tasks.map(t =&gt; ({
+        ...t,
+        id: t.id.toString(),
+        projectId: t.projectId.toString(),
+        assignedTo: t.assignedTo?.toString(),
+        createdBy: t.createdBy.toString(),
+      })),
+      milestones: project.milestones.map(m =&gt; ({
+        ...m,
+        id: m.id.toString(),
+        projectId: m.projectId.toString(),
+      })),
+    };
+  }
+
+  async updateProject(projectId: string, input: UpdateProjectInput) {
+    const project = await prisma.project.update({
+      where: { id: BigInt(projectId) },
+      data: {
+        name: input.name,
+        description: input.description,
+        startDate: input.startDate,
+        endDate: input.endDate,
+      },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    return this.transformProject(project);
+  }
+
+  async deleteProject(projectId: string) {
+    await prisma.project.delete({
+      where: { id: BigInt(projectId) },
+    });
+
+    return { success: true };
+  }
+
+  async addMember(projectId: string, input: AddMemberInput) {
+    // 查找用户
+    const user = await prisma.user.findUnique({
+      where: { id: BigInt(input.userId) },
+    });
+
+    if (!user) {
+      throw new Error(&#039;用户不存在&#039;);
+    }
+
+    const member = await prisma.projectMember.create({
+      data: {
+        projectId: BigInt(projectId),
+        userId: BigInt(input.userId),
+        role: input.role,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return {
+      ...member,
+      userId: member.userId.toString(),
+      user: {
+        ...member.user,
+        id: member.user.id.toString(),
+      },
+    };
+  }
+
+  async removeMember(projectId: string, userId: string) {
+    await prisma.projectMember.delete({
+      where: {
+        projectId_userId: {
+          projectId: BigInt(projectId),
+          userId: BigInt(userId),
+        },
+      },
+    });
+
+    return { success: true };
+  }
+
+  async getMembers(projectId: string) {
+    const members = await prisma.projectMember.findMany({
+      where: { projectId: BigInt(projectId) },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return members.map(m =&gt; ({
+      ...m,
+      userId: m.userId.toString(),
+      user: {
+        ...m.user,
+        id: m.user.id.toString(),
+      },
+    }));
+  }
+
+  private transformProject(project: any) {
+    return {
+      ...project,
+      id: project.id.toString(),
+      ownerId: project.ownerId.toString(),
+      owner: project.owner ? {
+        ...project.owner,
+        id: project.owner.id.toString(),
+      } : undefined,
+    };
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/services/project.service.ts && git commit -m "feat: implement project service"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 9: 创建项目控制器和路由</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/controllers/project.controller.ts</code></li>
+<li>Create: <code>backend/src/routes/project.routes.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建项目控制器</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/controllers/project.controller.ts
+import { Request, Response } from &#039;express&#039;;
+import { ProjectService } from &#039;../services/project.service&#039;;
+import { AppError } from &#039;../middleware/error.middleware&#039;;
+
+export class ProjectController {
+  private projectService = new ProjectService();
+
+  async createProject(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const input = {
+        name: req.body.name,
+        description: req.body.description,
+        code: req.body.code,
+        ownerId: req.user.userId,
+        startDate: req.body.startDate ? new Date(req.body.startDate) : undefined,
+        endDate: req.body.endDate ? new Date(req.body.endDate) : undefined,
+      };
+
+      const project = await this.projectService.createProject(input);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: project });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: error instanceof Error ? error.message : &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async getProjects(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const page = parseInt(req.query.page as string) || 1;
+      const pageSize = parseInt(req.query.pageSize as string) || 20;
+
+      const result = await this.projectService.getProjects(req.user.userId, page, pageSize);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: result });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async getProjectById(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const projectId = req.params.id;
+      const project = await this.projectService.getProjectById(projectId, req.user.userId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: project });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(404).json({
+          code: 404,
+          message: &#039;项目不存在或无权限&#039;,
+        });
+      }
+    }
+  }
+
+  async updateProject(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const projectId = req.params.id;
+      const input = {
+        name: req.body.name,
+        description: req.body.description,
+        startDate: req.body.startDate ? new Date(req.body.startDate) : undefined,
+        endDate: req.body.endDate ? new Date(req.body.endDate) : undefined,
+      };
+
+      const project = await this.projectService.updateProject(projectId, input);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: project });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async deleteProject(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const projectId = req.params.id;
+      await this.projectService.deleteProject(projectId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: { success: true } });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+
+  async getMembers(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const projectId = req.params.id;
+      const members = await this.projectService.getMembers(projectId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: members });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+
+  async addMember(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const projectId = req.params.id;
+      const input = {
+        userId: req.body.userId,
+        role: req.body.role || &#039;MEMBER&#039;,
+      };
+
+      const member = await this.projectService.addMember(projectId, input);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: member });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: error instanceof Error ? error.message : &#039;服务器错误&#039;,
+      });
+    }
+  }
+
+  async removeMember(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const projectId = req.params.id;
+      const userId = req.params.userId;
+
+      await this.projectService.removeMember(projectId, userId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: { success: true } });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建项目路由</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/routes/project.routes.ts
+import { Router } from &#039;express&#039;;
+import { ProjectController } from &#039;../controllers/project.controller&#039;;
+import { authenticate } from &#039;../middleware/auth.middleware&#039;;
+
+const router = Router();
+const projectController = new ProjectController();
+
+router.use(authenticate);
+
+router.post(&#039;/&#039;, projectController.createProject.bind(projectController));
+router.get(&#039;/&#039;, projectController.getProjects.bind(projectController));
+router.get(&#039;/:id&#039;, projectController.getProjectById.bind(projectController));
+router.put(&#039;/:id&#039;, projectController.updateProject.bind(projectController));
+router.delete(&#039;/:id&#039;, projectController.deleteProject.bind(projectController));
+router.get(&#039;/:id/members&#039;, projectController.getMembers.bind(projectController));
+router.post(&#039;/:id/members&#039;, projectController.addMember.bind(projectController));
+router.delete(&#039;/:id/members/:userId&#039;, projectController.removeMember.bind(projectController));
+
+export default router;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/controllers/project.controller.ts backend/src/routes/project.routes.ts && git commit -m "feat: implement project routes and controllers"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h2>Chunk 4: 任务管理模块</h2>
+<br>
+<hr>
+<br>
+<h3>Task 10: 创建任务服务</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/services/task.service.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建任务服务</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/services/task.service.ts
+import { Prisma } from &#039;@prisma/client&#039;;
+import { prisma } from &#039;../config/database&#039;;
+
+export interface CreateTaskInput {
+  title: string;
+  description?: string;
+  projectId: string;
+  assignedTo?: string;
+  createdBy: string;
+  status?: &#039;TODO&#039; | &#039;DOING&#039; | &#039;DONE&#039; | &#039;ARCHIVED&#039;;
+  priority?: number;
+  dueDate?: Date;
+  startDate?: Date;
+  tags?: string;
+  attachments?: string;
+}
+
+export interface UpdateTaskInput {
+  title?: string;
+  description?: string;
+  assignedTo?: string;
+  status?: &#039;TODO&#039; | &#039;DOING&#039; | &#039;DONE&#039; | &#039;ARCHIVED&#039;;
+  priority?: number;
+  dueDate?: Date;
+  startDate?: Date;
+  tags?: string;
+  attachments?: string;
+}
+
+export class TaskService {
+  async createTask(input: CreateTaskInput) {
+    const task = await prisma.task.create({
+      data: {
+        title: input.title,
+        description: input.description,
+        projectId: BigInt(input.projectId),
+        assignedTo: input.assignedTo ? BigInt(input.assignedTo) : null,
+        createdBy: BigInt(input.createdBy),
+        status: input.status || &#039;TODO&#039;,
+        priority: input.priority ?? 3,
+        dueDate: input.dueDate,
+        startDate: input.startDate,
+        tags: input.tags,
+        attachments: input.attachments,
+      },
+      include: {
+        assignedUser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        createdByUser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    // 创建活动记录
+    await this.createActivity(
+      input.createdBy,
+      input.projectId,
+      &#039;create_task&#039;,
+      task.id.toString()
+    );
+
+    return this.transformTask(task);
+  }
+
+  async getTasks(projectId: string, options: {
+    status?: string;
+    assignedTo?: string;
+    page?: number;
+    pageSize?: number;
+  } = {}) {
+    const where: any = {
+      projectId: BigInt(projectId),
+    };
+
+    if (options.status) {
+      where.status = options.status;
+    }
+
+    if (options.assignedTo) {
+      where.assignedTo = BigInt(options.assignedTo);
+    }
+
+    const skip = ((options.page || 1) - 1) * (options.pageSize || 20);
+
+    const [tasks, total] = await Promise.all([
+      prisma.task.findMany({
+        where,
+        include: {
+          assignedUser: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+            },
+          },
+          createdByUser: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+            },
+          },
+          _count: {
+            select: {
+              comments: true,
+            },
+          },
+        },
+        skip,
+        take: options.pageSize || 20,
+        orderBy: {
+          createdAt: &#039;desc&#039;,
+        },
+      }),
+      prisma.task.count({ where }),
+    ]);
+
+    return {
+      list: tasks.map(this.transformTask),
+      total,
+      page: options.page || 1,
+      pageSize: options.pageSize || 20,
+    };
+  }
+
+  async getTaskById(taskId: string) {
+    const task = await prisma.task.findUnique({
+      where: { id: BigInt(taskId) },
+      include: {
+        assignedUser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            email: true,
+          },
+        },
+        createdByUser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        comments: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: &#039;asc&#039;,
+          },
+        },
+      },
+    });
+
+    if (!task) {
+      throw new Error(&#039;任务不存在&#039;);
+    }
+
+    return {
+      ...this.transformTask(task),
+      comments: task.comments.map(c =&gt; ({
+        ...c,
+        userId: c.userId.toString(),
+        user: {
+          ...c.user,
+          id: c.user.id.toString(),
+        },
+      })),
+    };
+  }
+
+  async updateTask(taskId: string, input: UpdateTaskInput, userId: string) {
+    const task = await prisma.task.update({
+      where: { id: BigInt(taskId) },
+      data: {
+        title: input.title,
+        description: input.description,
+        assignedTo: input.assignedTo ? BigInt(input.assignedTo) : null,
+        status: input.status,
+        priority: input.priority,
+        dueDate: input.dueDate,
+        startDate: input.startDate,
+        tags: input.tags,
+        attachments: input.attachments,
+      },
+      include: {
+        assignedUser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        createdByUser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    // 创建活动记录
+    await this.createActivity(userId, task.projectId.toString(), &#039;update_task&#039;, taskId);
+
+    return this.transformTask(task);
+  }
+
+  async updateTaskStatus(taskId: string, status: string, userId: string) {
+    const task = await prisma.task.update({
+      where: { id: BigInt(taskId) },
+      data: { status: status as any },
+    });
+
+    // 创建活动记录
+    await this.createActivity(userId, task.projectId.toString(), &#039;update_task_status&#039;, taskId, {
+      from: task.status,
+      to: status,
+    });
+
+    return this.transformTask(task);
+  }
+
+  async deleteTask(taskId: string, userId: string) {
+    const task = await prisma.task.findUnique({
+      where: { id: BigInt(taskId) },
+    });
+
+    if (!task) {
+      throw new Error(&#039;任务不存在&#039;);
+    }
+
+    await prisma.task.delete({
+      where: { id: BigInt(taskId) },
+    });
+
+    // 创建活动记录
+    await this.createActivity(userId, task.projectId.toString(), &#039;delete_task&#039;, taskId);
+
+    return { success: true };
+  }
+
+  async getTasksByStatus(projectId: string) {
+    const tasks = await prisma.task.findMany({
+      where: {
+        projectId: BigInt(projectId),
+        status: {
+          not: &#039;ARCHIVED&#039;,
+        },
+      },
+      include: {
+        assignedUser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        createdByUser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+      orderBy: {
+        priority: &#039;asc&#039;,
+      },
+    });
+
+    // 按状态分组
+    const grouped = {
+      TODO: tasks.filter(t =&gt; t.status === &#039;TODO&#039;).map(this.transformTask),
+      DOING: tasks.filter(t =&gt; t.status === &#039;DOING&#039;).map(this.transformTask),
+      DONE: tasks.filter(t =&gt; t.status === &#039;DONE&#039;).map(this.transformTask),
+    };
+
+    return grouped;
+  }
+
+  private async createActivity(
+    userId: string,
+    projectId: string,
+    action: string,
+    entityId: string,
+    metadata?: any
+  ) {
+    await prisma.activity.create({
+      data: {
+        userId: BigInt(userId),
+        action,
+        entityType: &#039;task&#039;,
+        entityId: BigInt(entityId),
+        projectId: BigInt(projectId),
+        metadata: metadata ? JSON.stringify(metadata) : null,
+      },
+    });
+  }
+
+  private transformTask(task: any) {
+    return {
+      ...task,
+      id: task.id.toString(),
+      projectId: task.projectId.toString(),
+      assignedTo: task.assignedTo?.toString(),
+      createdBy: task.createdBy.toString(),
+      assignedUser: task.assignedUser ? {
+        ...task.assignedUser,
+        id: task.assignedUser.id.toString(),
+      } : undefined,
+      createdByUser: task.createdByUser ? {
+        ...task.createdByUser,
+        id: task.createdByUser.id.toString(),
+      } : undefined,
+    };
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/services/task.service.ts && git commit -</code>m "feat: implement task service"`</p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 11: 创建任务控制器和路由</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/controllers/task.controller.ts</code></li>
+<li>Create: <code>backend/src/routes/task.routes.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建任务控制器</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/controllers/task.controller.ts
+import { Request, Response } from &#039;express&#039;;
+import { TaskService } from &#039;../services/task.service&#039;;
+import { AppError } from &#039;../middleware/error.middleware&#039;;
+
+export class TaskController {
+  private taskService = new TaskService();
+
+  async createTask(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const input = {
+        title: req.body.title,
+        description: req.body.description,
+        projectId: req.body.projectId,
+        assignedTo: req.body.assignedTo,
+        createdBy: req.user.userId,
+        status: req.body.status,
+        priority: req.body.priority,
+        dueDate: req.body.dueDate ? new Date(req.body.dueDate) : undefined,
+        startDate: req.body.startDate ? new Date(req.body.startDate) : undefined,
+        tags: req.body.tags,
+        attachments: req.body.attachments,
+      };
+
+      const task = await this.taskService.createTask(input);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: task });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: error instanceof Error ? error.message : &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async getTasks(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const projectId = req.params.projectId;
+      const options = {
+        status: req.query.status as string,
+        assignedTo: req.query.assignedTo as string,
+        page: parseInt(req.query.page as string) || 1,
+        pageSize: parseInt(req.query.pageSize as string) || 20,
+      };
+
+      const result = await this.taskService.getTasks(projectId, options);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: result });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+
+  async getTaskById(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const taskId = req.params.id;
+      const task = await this.taskService.getTaskById(taskId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: task });
+    } catch (error) {
+      res.status(404).json({
+        code: 404,
+        message: &#039;任务不存在&#039;,
+      });
+    }
+  }
+
+  async updateTask(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const taskId = req.params.id;
+      const input = {
+        title: req.body.title,
+        description: req.body.description,
+        assignedTo: req.body.assignedTo,
+        status: req.body.status,
+        priority: req.body.priority,
+        dueDate: req.body.dueDate ? new Date(req.body.dueDate) : undefined,
+        startDate: req.body.startDate ? new Date(req.body.startDate) : undefined,
+        tags: req.body.tags,
+        attachments: req.body.attachments,
+      };
+
+      const task = await this.taskService.updateTask(taskId, input, req.user.userId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: task });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async updateTaskStatus(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const taskId = req.params.id;
+      const { status } = req.body;
+
+      if (!status) {
+        throw new AppError(400, &#039;缺少状态参数&#039;);
+      }
+
+      const task = await this.taskService.updateTaskStatus(taskId, status, req.user.userId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: task });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async deleteTask(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const taskId = req.params.id;
+      await this.taskService.deleteTask(taskId, req.user.userId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: { success: true } });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async getTasksByStatus(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const projectId = req.params.projectId;
+      const groupedTasks = await this.taskService.getTasksByStatus(projectId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: groupedTasks });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建任务路由</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/routes/task.routes.ts
+import { Router } from &#039;express&#039;;
+import { TaskController } from &#039;../controllers/task.controller&#039;;
+import { authenticate } from &#039;../middleware/auth.middleware&#039;;
+
+const router = Router();
+const taskController = new TaskController();
+
+router.use(authenticate);
+
+router.post(&#039;/&#039;, taskController.createTask.bind(taskController));
+router.get(&#039;/project/:projectId&#039;, taskController.getTasks.bind(taskController));
+router.get(&#039;/board/:projectId&#039;, taskController.getTasksByStatus.bind(taskController));
+router.get(&#039;/:id&#039;, taskController.getTaskById.bind(taskController));
+router.put(&#039;/:id&#039;, taskController.updateTask.bind(taskController));
+router.patch(&#039;/:id/status&#039;, taskController.updateTaskStatus.bind(taskController));
+router.delete(&#039;/:id&#039;, taskController.deleteTask.bind(taskController));
+
+export default router;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/controllers/task.controller.ts backend/src/routes/task.routes.ts && git commit -m "feat: implement task routes and controllers"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h2>Chunk 5: 其他核心模块（文件、评论、统计、日程）</h2>
+<br>
+<hr>
+<br>
+<h3>Task 12: 创建文件服务</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/services/file.service.ts</code></li>
+<li>Create: <code>backend/src/controllers/file.controller.ts</code></li>
+<li>Create: <code>backend/src/routes/file.routes.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建文件服务</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/services/file.service.ts
+import { promises as fs } from &#039;fs&#039;;
+import path from &#039;path&#039;;
+import { prisma } from &#039;../config/database&#039;;
+import { config } from &#039;../config/index&#039;;
+
+export class FileService {
+  async uploadFile(
+    file: Express.Multer.File,
+    projectId?: string,
+    taskId?: string,
+    uploadedBy: string
+  ) {
+    const savedFile = await prisma.file.file.create({
+      data: {
+        name: file.originalname,
+        path: file.path,
+        size: BigInt(file.size),
+        type: file.mimetype,
+        uploadedBy: BigInt(uploadedBy),
+        taskId: taskId ? BigInt(taskId) : null,
+        projectId: projectId ? BigInt(projectId) : null,
+      },
+    });
+
+    return {
+      id: savedFile.id.toString(),
+      name: savedFile.name,
+      size: savedFile.size.toString(),
+      type: savedFile.type,
+      createdAt: savedFile.createdAt,
+    };
+  }
+
+  async getFile(fileId: string) {
+    const file = await prisma.file.file.findUnique({
+      where: { id: BigInt(fileId) },
+    });
+
+    if (!file) {
+      throw new Error(&#039;文件不存在&#039;);
+    }
+
+    return file;
+  }
+
+  async deleteFile(fileId: string) {
+    const file = await this.getFile(fileId);
+
+    // 删除物理文件
+    try {
+      await fs.unlink(file.path);
+    } catch (error) {
+      console.error(&#039;删除文件失败:&#039;, error);
+    }
+
+    // 删除数据库记录
+    await prisma.file.file.delete({
+      where: { id: BigInt(file(fileId)) },
+    });
+
+    return { success: true };
+  }
+
+  async getProjectFiles(projectId: string) {
+    const files = await prisma.file.file.findMany({
+      where: { projectId: BigInt(projectId) },
+      include: {
+        uploader: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: &#039;desc&#039;,
+      },
+    });
+
+    return files.map(f =&gt; ({
+      ...f,
+      id: f.id.toString(),
+      uploadedBy: f.uploadedBy.toString(),
+      uploader: {
+        ...f.uploader,
+        id: f.uploader.id.toString(),
+      },
+    }));
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建文件控制器</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/controllers/file.controller.ts
+import { Request, Response } from &#039;express&#039;;
+import { FileService } from &#039;../services/file.service&#039;;
+import { AppError } from &#039;../middleware/error.middleware&#039;;
+
+export class FileController {
+  private fileService = new FileService();
+
+  async uploadFile(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      if (!req.file) {
+        throw new AppError(400, &#039;没有上传文件&#039;);
+      }
+
+      const file = await this.fileService.uploadFile(
+        req.file,
+        req.body.projectId,
+        req.body.taskId,
+        req.user.userId
+      );
+
+      res.json({ code: 200, message: &#039;success&#039;, data: file });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async getProjectFiles(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const projectId = req.params.projectId;
+      const files = await this.fileService.getProjectFiles(projectId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: files });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+
+  async deleteFile(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const fileId = req.params.id;
+      await this.fileService.deleteFile(fileId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: { success: true } });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 创建文件路由</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/routes/file.routes.ts
+import { Router } from &#039;express&#039;;
+import { FileController } from &#039;../controllers/file.controller&#039;;
+import { authenticate } from &#039;../middleware/auth.middleware&#039;;
+import multer from &#039;multer&#039;;
+import { config } from &#039;../config/index&#039;;
+
+const router = Router();
+const fileController = new FileController();
+
+// 配置multer
+const upload = multer({
+  dest: config.upload.dir,
+  limits: {
+    fileSize: config.maxSize,
+  },
+});
+
+router.use(authenticate);
+
+router.post(&#039;/upload&#039;, upload.single(&#039;file&#039;), fileController.uploadFile.bind(fileController));
+router.get(&#039;/project/:projectId&#039;, fileController.getProjectFiles.bind(fileController));
+router.delete(&#039;/:id&#039;, fileController.deleteFile.bind(fileController));
+
+export default router;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 4: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/services/file.service.ts backend/src/controllers/file.controller.ts backend/src/routes/file.routes.ts && git commit -m "feat: implement file management service"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 13: 创建评论服务</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/services/comment.service.ts</code></li>
+<li>Create: <code>backend/src/controllers/comment.controller.ts</code></li>
+<li>Create: <code>backend/src/routes/comment.routes.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建评论服务</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/services/comment.service.ts
+import { prisma } from &#039;../config/database&#039;;
+
+export class CommentService {
+  async createComment(
+    content: string,
+    entityType: string,
+    entityId: string,
+    userId: string,
+    parentId?: string,
+    mentions?: string[]
+  ) {
+    const comment = await prisma.comment.create({
+      data: {
+        content,
+        entityType,
+        entityId: BigInt(entityId),
+        userId: BigInt(userId),
+        parentId: parentId ? BigInt(parentId) : null,
+        mentions: mentions ? JSON.stringify(mentions) : null,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    return {
+      ...comment,
+      userId: comment.userId.toString(),
+      user: {
+        ...comment.user,
+        id: comment.user.id.toString(),
+      },
+    };
+  }
+
+  async getComments(entityType: string, entityId: string) {
+    const comments = await prisma.comment.findMany({
+      where: {
+        entityType,
+        entityId: BigInt(entityId),
+        parentId: null,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        replies: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: &#039;asc&#039;,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: &#039;asc&#039;,
+      },
+    });
+
+    return comments.map(c =&gt; ({
+      ...c,
+      userId: c.userId.toString(),
+      user: {
+        ...c.user,
+        id: c.user.id.toString(),
+      },
+      replies: c.replies.map(r =&gt; ({
+        ...r,
+        userId: r.userId.toString(),
+        parentId: r.parentId?.toString(),
+        user: {
+          ...r.user,
+          id: r.user.id.toString(),
+        },
+      })),
+    }));
+  }
+
+  async deleteComment(commentId: string, userId: string) {
+    const comment = await prisma.comment.findUniqueUnique({
+      where: { id: BigInt(commentId) },
+    });
+
+    if (!comment) {
+      throw new Error(&#039;评论不存在&#039;);
+    }
+
+    if (comment.userId.toString() !== userId) {
+      throw new Error(&#039;无权删除此评论&#039;);
+    }
+
+    await prisma.comment.delete({
+      where: { id: BigInt(commentId) },
+    });
+
+    return { success: true };
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建评论控制器</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/controllers/comment.controller.ts
+import { Request, Response } from &#039;express&#039;;
+import { CommentService } from &#039;../services/comment.service&#039;;
+import { AppError } from &#039;../middleware/error.middleware&#039;;
+
+export class CommentController {
+  private commentService = new CommentService();
+
+  async createComment(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const comment = await this.commentService.createComment(
+        req.body.content,
+        req.body.entityType,
+        req.body.entityId,
+        req.user.userId,
+        req.body.parentId,
+        req.body.mentions
+      );
+
+      res.json({ code: 200, message: &#039;success&#039;, data: comment });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: error instanceof Error ? error.message : &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async getComments(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const { entityType, entityId } = req.params;
+      const comments = await this.commentService.getComments(entityType, entityId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: comments });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+
+  async deleteComment(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const commentId = req.params.id;
+      await this.commentService.deleteComment(commentId, req.user.userId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: { success: true } });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: error instanceof Error ? error.message : &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 创建评论路由</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/routes/comment.routes.ts
+import { Router } from &#039;express&#039;;
+import { CommentController } from &#039;../controllers/comment.controller&#039;;
+import { authenticate } from &#039;../&#039;middleware/auth.middleware&#039;;
+
+const router = Router();
+const commentController = new CommentController();
+
+router.use(authenticate);
+
+router.post(&#039;/&#039;, commentController.createComment.bind(commentController));
+router.get(&#039;/:entityType/:entityId&#039;, commentController.getComments.bind(commentController));
+router.delete(&#039;/:id&#039;, commentController.deleteComment.bind(commentController));
+
+export default router;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 4: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/services/comment.service.ts backend/src/controllers/comment.controller.ts backend/src/routes/comment.routes.ts && git commit -m "feat: implement comment service"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 14: 创建统计服务</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/services/stats.service.ts</code></li>
+<li>Create: <code>backend/src/controllers/stats.controller.ts</code></li>
+<li>Create: <code>backend/src/routes/stats.routes.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建统计服务</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/services/stats.service.ts
+import { prisma } from &#039;../config/database&#039;;
+
+export class StatsService {
+  async getProjectStats(projectId: string) {
+    const [taskStats, memberStats, milestoneStats] = await Promise.all([
+      this.getTaskStats(projectId),
+      this.getMemberStats(projectId),
+      this.getMilestoneStats(projectId),
+    ]);
+
+    return {
+      tasks: taskStats,
+      members: memberStats,
+      milestones: milestoneStats,
+    };
+  }
+
+  private async getTaskStats(projectId: string) {
+    const [total, todo, doing, done, overdue] = await Promise.all([
+      prisma.task.count({
+        where: { projectId: BigInt(projectId) },
+      }),
+      prisma.task.count({
+        where: { projectId: BigInt(projectId), status: &#039;TODO&#039; },
+      }),
+      prisma.task.count({
+        where: { projectId: BigInt(projectId), status: &#039;DOING&#039; },
+      }),
+      prisma.task.count({
+        where: { projectId: BigInt(projectId), status: &#039;DONE&#039; },
+      }),
+      prisma.task.count({
+        where: {
+          projectId: BigInt(projectId),
+          dueDate: { lt: new Date() },
+          status: { not: &#039;DONE&#039; },
+        },
+      }),
+    ]);
+
+    return {
+      total,
+      status: { todo, doing, done },
+      overdue,
+      completionRate: total &gt; 0 ? (done / total * 100).toFixed(2) : &#039;0&#039;,
+    };
+  }
+
+  private async getMemberStats(projectId: string) {
+    const members = await prisma.projectMember.findMany({
+      where: { projectId: BigInt(projectId) },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    const memberStats = await Promise.all(
+      members.map(async (member) =&gt; {
+        const [assignedTasks, completedTasks] = await Promise.all([
+          prisma.task.count({
+            where: {
+              projectId: BigInt(projectId),
+              assignedTo: member.userId,
+            },
+          }),
+          prisma.task.count({
+            where: {
+              projectId: BigInt(projectId),
+              assignedTo: member.userId,
+              status: &#039;DONE&#039;,
+            },
+          }),
+        ]);
+
+        const workHours = await prisma.workHour.aggregate({
+          where: {
+            projectId: BigInt(projectId),
+            userId: member.userId,
+          },
+          _sum: {
+            hours: true,
+          },
+        });
+
+        return {
+          userId: member.userId.toString(),
+          name: member.user.name,
+          avatar: member.user.avatar,
+          assignedTasks,
+          completedTasks,
+          completionRate: assignedTasks &gt; 0
+            ? (completedTasks / assignedTasks * 100).toFixed(2)
+            : &#039;0&#039;,
+          totalHours: workHours._sum.hours?.toString() || &#039;0&#039;,
+        };
+      })
+    );
+
+    return memberStats;
+  }
+
+  private async getMilestoneStats(projectId: string) {
+    const milestones = await prisma.milestone.findMany({
+      where: { projectId: BigInt(projectId) },
+      orderBy: { dueDate: &#039;asc&#039; },
+    });
+
+    return {
+      total: milestones.length,
+      completed: milestones.filter(m =&gt; m.status === &#039;COMPLETED&#039;).length,
+      pending: milestones.filter(m =&gt; m.status === &#039;PENDING&#039;).length,
+    };
+  }
+
+  async getMemberStatsOverall(userId: string) {
+    const [assignedTasks, completedTasks, workHoursResult] = await Promise.all([
+      prisma.task.count({
+        where: { assignedTo: BigInt(userId) },
+      }),
+      prisma.task.count({
+        where: {
+          assignedTo: BigInt(userId),
+          status: &#039;DONE&#039;,
+        },
+      }),
+      prisma.workHour.aggregate({
+        where: { userId: BigInt(userId) },
+        _sum: {
+          hours: true,
+        },
+      }),
+    ]);
+
+    return {
+      assignedTasks,
+      completedTasks,
+      completionRate: assignedTasks &gt; 0
+        ? (completedTasks / assignedTasks * 100).toFixed(2)
+        : &#039;0&#039;,
+      totalHours: workHoursResult._sum.hours?.toString() || &#039;0&#039;,
+    };
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建统计控制器</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/controllers/stats.controller.ts
+import { Request, Response } from &#039;express&#039;;
+import { StatsService } from &#039;../services/stats.service&#039;;
+
+export class StatsController {
+  private statsService = new StatsService();
+
+  async getProjectStats(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const projectId = req.params.id;
+      const stats = await this.statsService.getProjectStats(projectId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: stats });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+
+  async getMemberStats(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const userId = { req.params.id;
+      const stats = await this.statsService.getMemberStatsOverall(userId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: stats });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 创建统计路由</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/routes/stats.routes.ts
+import { Router } from &#039;express&#039;;
+import { StatsController } from &#039;../controllers/stats.controller&#039;;
+import { authenticate } from &#039;../middleware/auth.middleware&#039;;
+
+const router = Router();
+const statsController = new StatsController();
+
+router.use(authenticate);
+
+router.get(&#039;/project/:id&#039;, statsController.getProjectStats.bind(statsController));
+router.get(&#039;/member/:id&#039;, statsController.getMemberStats.bind(statsController));
+
+export default router;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 4: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/services/stats.service.ts backend/src/controllers/stats.controller.ts backend/src/routes/stats.routes.ts && git commit -m "feat: implement stats service"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 15: 创建日程服务</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/services/event.service.ts</code></li>
+<li>Create: <code>backend/src/controllers/event.controller.ts</code></li>
+<li>Create: <code>backend/src/routes/event.routes.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建日程服务</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/services/event.service.ts
+import { prisma } from &#039;../config/database&#039;;
+
+export interface CreateEventInput {
+  title: string;
+  description?: string;
+  location?: string;
+  userId: string;
+  projectId?: string;
+  taskId?: string;
+  startTime: Date;
+  endTime: Date;
+  allDay?: boolean;
+  reminderMinutes?: number;
+  repeatRule?: string;
+}
+
+export class EventService {
+  async createEvent(input: CreateEventInput) {
+    const event = await prisma.event.create({
+      data: {
+        title: input.title,
+        description: input.description,
+        location: input.location,
+        userId: BigInt(input.userId),
+        projectId: input.projectId ? BigInt(input.projectId) : null,
+        taskId: input.taskId ? BigInt(input.taskId) : null,
+        startTime: input.startTime,
+        endTime: input.endTime,
+        allDay: input.allDay || false,
+        reminderMinutes: input.reminderMinutes || 0,
+        repeatRule: input.repeatRule,
+      },
+    });
+
+    return this.transformEvent(event);
+  }
+
+  async getEvents(userId: string, startDate?: Date, endDate?: Date) {
+    const where: any = {
+      userId: BigInt(userId),
+    };
+
+    if (startDate &amp;&amp; endDate) {
+      where.startTime = {
+        gte: startDate,
+        lte: endDate,
+      };
+    }
+
+    const events = await prisma.event.findMany({
+      where,
+      orderBy: {
+        startTime: &#039;asc&#039;,
+      },
+    });
+
+    return events.map(this.transformEvent);
+  }
+
+  async getEventById(eventId: string) {
+    const event = await prisma.event.findUnique({
+      where: { id: BigInt(eventId) },
+    });
+
+    if (!event) {
+      throw new Error(&#039;日程不存在&#039;);
+    }
+
+    return this.transformEvent(event);
+  }
+
+  async updateEvent(eventId: string, input: Partial&lt;CreateEventInput&gt;) {
+    const event = await prisma.event.update({
+      where: { id: BigInt(eventId) },
+      data: {
+        title: input.title,
+        description: input.description,
+        location: input.location,
+        projectId: input.projectId ? BigInt(input.projectId) : undefined,
+        taskId: input.taskId ? BigInt(input.taskId) : undefined,
+        startTime: input.startTime,
+        endTime: input.endTime,
+        allDay: input.allDay,
+        reminderMinutes: input.reminderMinutes,
+        repeatRule: input.repeatRule,
+      },
+    });
+
+    return this.transformEvent(event);
+  }
+
+  async deleteEvent(eventId: string) {
+    await prisma.event.delete({
+      where: { id: BigInt(eventId) },
+    });
+
+    return { success: true };
+  }
+
+  private transformEvent(event: any) {
+    return {
+      ...event,
+      id: event.id.toString(),
+      userId: event.userId.toString(),
+      projectId: event.projectId?.toString(),
+      taskId: event.taskId?.toString(),
+    };
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建日程控制器</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/controllers/event.controller.ts
+import { Request, Response } from &#039;express&#039;;
+import { EventService } from &#039;../services/event.service&#039;;
+import { AppError } from &#039;../middleware/error.middleware&#039;;
+
+export class EventController {
+  private eventService = new EventService();
+
+  async createEvent(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const input = {
+        title: req.body.title,
+        description: req.body.description,
+        location: req.body.location,
+        userId: req.user.userId,
+        projectId: req.body.projectId,
+        taskId: req.body.taskId,
+        startTime: new Date(req.body.startTime),
+        endTime: new Date(req.body.endTime),
+        allDay: req.body.allDay,
+        reminderMinutes: req.body.reminderMinutes,
+        repeatRule: req.body.repeatRule,
+      };
+
+      const event = await this.eventService.createEvent(input);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: event });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: error instanceof Error ? error.message : &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async getEvents(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      if (!req.user) {
+        throw new AppError(401, &#039;未认证&#039;);
+      }
+
+      const startDate = req.query.startDate ? new Date(req.query.startDate as string) : undefined;
+      const endDate = req.query.endDate ? new Date(req.query.endDate as string) : undefined;
+
+      const events = await this.eventService.getEvents(req.user.userId, startDate, endDate);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: events });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.code).json({
+          code: error.code,
+          message: error.message,
+        });
+      } else {
+        res.status(500).json({
+          code: 500,
+          message: &#039;服务器错误&#039;,
+        });
+      }
+    }
+  }
+
+  async getEventById(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const eventId = req.params.id;
+      const event = await this.eventService.getEventById(eventId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: event });
+    } catch (error) {
+      res.status(404).json({
+        code: 404,
+        message: &#039;日程不存在&#039;,
+      });
+    }
+  }
+
+  async updateEvent(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const eventId = req.params.id;
+      const input = {
+        title: req.body.title,
+        description: req.body.description,
+        location: req.body.location,
+        projectId: req.body.projectId,
+        taskId: req.body.taskId,
+        startTime: req.body.startTime ? new Date(req.body.startTime) : undefined,
+        endTime: req.body.endTime ? new Date(req.body.endTime) : undefined,
+        allDay: req.body.allDay,
+        reminderMinutes: req.body.reminderMinutes,
+        repeatRule: req.body.repeatRule,
+      };
+
+      const event = await this.eventService.updateEvent(eventId, input);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: event });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+
+  async deleteEvent(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const eventId = req.params.id;
+      await this.eventService.deleteEvent(eventId);
+
+      res.json({ code: 200, message: &#039;success&#039;, data: { success: true } });
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        message: &#039;服务器错误&#039;,
+      });
+    }
+  }
+}
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 创建日程路由</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/routes/event.routes.ts
+import { Router } from &#039;express&#039;;
+import { EventController } from &#039;../controllers/event.controller&#039;;
+import { authenticate } from &#039;../middleware/auth.middleware&#039;;
+
+const router = Router();
+const eventController = new EventController();
+
+router.use(authenticate);
+
+router.post(&#039;/&#039;, eventController.createEvent.bind(eventController));
+router.get(&#039;/&#039;, eventController.getEvents.bind(eventController));
+router.get(&#039;/:id&#039;, eventController.getEventById.bind(eventController));
+router.put(&#039;/:id&#039;, eventController.updateEvent.bind(eventController));
+router.delete(&#039;/:id&#039;, eventController.deleteEvent.bind(eventController));
+
+export default router;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 4: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add backend/src/services/event.service.ts backend/src/controllers/event.controller.ts backend/src/routes/event.routes.ts && git commit -m "feat: implement event service"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h2>Chunk 6: 服务器主入口和路由整合</h2>
+<br>
+<hr>
+<br>
+<h3>Task 16: 创建主路由文件和服务器入口</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>backend/src/routes/index.ts</code></li>
+<li>Create: <code>backend/src/middleware/logger.middleware.ts</code></li>
+<li>Create: <code>backend/src/server.ts</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建主路由文件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/routes/index.ts
+import { Router } from &#039;express&#039;;
+import authRoutes from &#039;./auth.routes&#039;;
+import projectRoutes from &#039;./project.routes&#039;;
+import taskRoutes from &#039;./task.routes&#039;;
+import fileRoutes from &#039;./file.routes&#039;;
+import commentRoutes from &#039;./comment.routes&#039;;
+import statsRoutes from &#039;./stats.routes&#039;;
+import eventRoutes from &#039;./event.routes&#039;;
+
+const router = Router();
+
+router.use(&#039;/auth&#039;, authRoutes);
+router.use(&#039;/projects&#039;, projectRoutes);
+router.use(&#039;/tasks&#039;, taskRoutes);
+router.use(&#039;/files&#039;, fileRoutes);
+router.use(&#039;/comments&#039;, commentRoutes);
+router.use(&#039;/stats&#039;, statsRoutes);
+router.use(&#039;/events&#039;, eventRoutes);
+
+router.get(&#039;/health&#039;, (req, res) =&gt; {
+  res.json({ code: 200, message: &#039;Server is healthy&#039; });
+});
+
+export default router;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建日志中间件</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/middleware/logger.middleware.ts
+import { Request, Response, NextFunction } from &#039;express&#039;;
+
+export const requestLogger = (req: Request, res: Response, next: NextFunction): void =&gt; {
+  const start = Date.now();
+
+  res.on(&#039;finish&#039;, () =&gt; {
+    const duration = Date.now() - start;
+    console.log(`${req.method} ${req.path} ${res.statusCode} - ${duration}ms`);
+  });
+
+  next();
+};
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 创建服务器入口</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/src/server.ts
+import express, { Application } from &#039;express&#039;;
+import cors from &#039;cors&#039;;
+import helmet from &#039;helmet&#039;;
+import rateLimit from &#039;express-rate-limit&#039;;
+import { config } from &#039;./config&#039;;
+import { Database } from &#039;./config/database&#039;;
+import routes from &#039;./routes&#039;;
+import { requestLogger } from &#039;./middleware/logger.middleware&#039;;
+import { errorHandler, notFoundHandler } from &#039;./middleware/error.middleware&#039;;
+
+const app: Application = express();
+
+// 安全中间件
+app.use(helmet());
+
+// CORS
+app.use(cors({
+  origin: process.env.FRONTEND_URL || &#039;http://localhost:5173&#039;,
+  credentials: true,
+}));
+
+// 限流
+app.use(rateLimit({
+  windowMs: config.rateLimit.windowMs,
+  max: config.rateLimit.max,
+}));
+
+// 请求日志
+app.use(requestLogger);
+
+// 解析请求体
+app.use(express.json({ limit: &#039;10mb&#039; }));
+app.use(express.urlencoded({ extended: true, limit: &#039;10mb&#039; }));
+
+// 健康检查
+app.get(&#039;/health&#039;, (req, res) =&gt; {
+  res.json({ status: &#039;ok&#039;, timestamp: new Date().toISOString() });
+});
+
+// API路由
+app.use(&#039;/api/v1&#039;, routes);
+
+// 404处理
+app.use(notFoundHandler);
+
+// 错误处理
+app.use(errorHandler);
+
+async function startServer() {
+  try {
+    // 连接数据库
+    await Database.connect();
+
+    // 启动服务器
+    app.listen(config.port, () =&gt; {
+      console.log(`
+====================================
+🚀 Server running on port ${config.port}
+📅 Environment: ${config.nodeEnv}
+🌐 API: http://localhost:${config.port}/api/v1
+====================================
+      `);
+    });
+  } catch (error) {
+    console.error(&#039;Failed to start server:&#039;, error);
+    process.exit(1);
+  }
+}
+
+// 优雅关闭
+process.on(&#039;SIGTERM&#039;, async () =&gt; {
+  console.log(&#039;SIGTERM signal received.&#039;);
+  await Database.disconnect();
+  process.exit(0);
+});
+
+process.on(&#039;SIGINT&#039;, async () =&gt; {
+  console.log(&#039;SIGINT signal received.&#039;);
+  await Database.disconnect();
+  process.exit(0);
+});
+
+startServer();
+</pre></div>
+<br>
+<li>[ ] <strong>Step` 4: 创建Jest配置</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>typescript</span></div><pre class="language-typescript">// backend/jest.config.ts
+module.exports = {
+  preset: &#039;ts-jest&#039;,
+  testEnvironment: &#039;node&#039;,
+  roots: [&#039;&lt;rootDir&gt;/src&#039;, &#039;&lt;rootDir&gt;/tests&#039;],
+  testMatch: [&#039;**/*.test.ts&#039;],
+  collectCoverageFrom: [
+    &#039;src/**/*.ts&#039;,
+    &#039;!src/**/*.d.ts&#039;,
+  ],
+  moduleDirectories: [&#039;node_modules&#039;, &#039;src&#039;],
+};
+</pre></div>
+<br>
+<li>[ ] <strong>Step 5: 更新package.json scripts</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>bash</span></div><pre class="language-bash">cd backend &amp;&amp; npm pkg set scripts.dev=&quot;nodemon src/server.ts&quot; &amp;&amp; npm pkg set scripts.build=&quot;tsc&quot; &amp;&amp; npm pkg set scripts.start=&quot;node dist/server.js&quot; &amp;&amp; npm pkg set scripts.test=&quot;jest&quot; &amp;&amp; npm pkg set scripts.test:watch=&quot;jest --watch&quot; &amp;&amp; npm pkg set scripts.prisma:generate=&quot;prisma generate&quot; &amp;&amp; npm pkg set scripts.prisma:migrate=&quot;prisma migrate dev&quot; &amp;&amp; npm pkg set scripts.prisma:studio=&quot;prisma studio&quot;
+</pre></div>
+<br>
+<li>[ ] <strong>Step 6: 提交代码</strong></li>
+<br>
+<p>Run: <code>cd .. && git add backend && git commit -m "feat: implement server main entry and route integration"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 17: 创建Docker配置</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>docker/docker-compose.yml</code></li>
+<li>Create: <code>docker/mysql/init.sql</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建docker-compose.yml</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>yaml</span></div><pre class="language-yaml">version: &#039;3.8&#039;
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: project_management_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: project_management
+      MYSQL_USER: project_user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - &quot;3306:3306&quot;
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [&quot;CMD&quot;, &quot;mysqladmin&quot;, &quot;ping&quot;, &quot;-h&quot;, &quot;localhost&quot;]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile
+    container_name: project_management_backend
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: mysql://project_user:userpassword@mysql:3306/project_management
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: 2h
+      JWT_REFRESH_EXPIRES_IN: 30d
+      WECHAT_APP_ID: ${WECHAT_APP_ID}
+      WECHAT_APP_SECRET: ${WECHAT_APP_SECRET}
+      WECHAT_REDIRECT_URI: ${WECHAT_REDIRECT_URI}
+      DINGTALK_APP_ID: ${DINGTALK_APP_ID}
+      DINGTALK_APP_SECRET: ${DINGTALK_APP_SECRET}
+      DINGTALK_REDIRECT_URI: ${DINGTALK_REDIRECT_URI}
+      MAX_FILE_SIZE: 10485760
+      UPLOAD_DIR: /app/uploads
+      RATE_LIMIT_WINDOW: 15
+      RATE_LIMIT_MAX: 100
+    ports:
+      - &quot;3000:3000&quot;
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - backend_uploads:/app/uploads
+
+volumes:
+  mysql_data:
+  backend_uploads:
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建MySQL初始化脚本</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>sql</span></div><pre class="language-sql">-- docker/mysql/init.sql
+CREATE DATABASE IF NOT EXISTS project_management CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+USE project_management;
+
+-- 创建默认角色
+INSERT INTO roles (name, description, permissions) VALUES
+(&#039;ADMIN&#039;, &#039;系统管理员&#039;, JSON_ARRAY(&#039;*&#039;)),
+(&#039;USER&#039;, &#039;普通用户&#039;, JSON_ARRAY(&#039;project:read&#039;, &#039;project:create&#039;, &#039;task:read&#039;, &#039;task:create&#039;, &#039;task:update&#039;));
+</pre></div>
+<br>
+<li>[ ] <strong>Step 3: 创建Dockerfile</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>dockerfile</span></div><pre class="language-dockerfile"># docker/Dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY ../backend/package*.json ./
+
+RUN npm ci --only=production
+
+COPY ../backend/tsconfig.json ./
+COPY ../backend/src ./src
+
+RUN npm run build
+
+EXPOSE 3000
+
+CMD [&quot;node&quot;, &quot;dist/server.js&quot;]
+</pre></div>
+<br>
+<li>[ ] <strong>Step 4: 提交代码</strong></li>
+<br>
+<p>Run: <code>git add docker && git commit -m "feat: add Docker configuration for deployment"</code></p>
+<p>Expected: Commit created</p>
+<br>
+<hr>
+<br>
+<h3>Task 18: 创建README和文档</h3>
+<br>
+<p><strong>Files:</strong></p>
+<li>Create: <code>README.md</code></li>
+<li>Create: <code>docs/deployment.md</code></li>
+<br>
+<li>[ ] <strong>Step 1: 创建项目README</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>markdown</span></div><pre class="language-markdown"># 项目管理系统
+
+一个轻量级的项目管理系统，支持微信/钉钉登录，适用于10-50人小型团队。
+
+## 功能特性
+
+- ✅ 用户认证（微信/钉钉OAuth2.0）
+- ✅ 项目管理（创建、编辑、归档、成员管理）
+- ✅ 任务管理（看板、列表、状态跟踪）
+- ✅ 团队协作（文件共享、评论、活动流）
+- ✅ 统计报表（项目统计、成员贡献）
+- ✅ 日程管理（日历视图、会议安排）
+
+## 技术栈
+
+### 后端
+- Node.js + Express
+- TypeScript
+- Prisma ORM
+- MySQL 8.0
+
+### 前端
+- React
+- TypeScript
+- Vite
+
+## 快速开始
+
+### 前置要求
+
+- Node.js 20+
+- MySQL 8.0+
+- npm or yarn
+
+### 安装
+
+</pre></div>
+<h1>克隆仓库</h1>
+<p>git clone <repository-url></p>
+<p>cd xiangmuguanli</p>
+<br>
+<h1>后端安装</h1>
+<p>cd backend</p>
+<p>npm install</p>
+<br>
+<h1>配置环境变量</h1>
+<p>cp .env.example .env</p>
+<h1>编辑.env文件，填写必要的配置</h1>
+<br>
+<h1>生成Prisma Client</h1>
+<p>npm run prisma:generate</p>
+<br>
+<h1>运行数据库迁移</h1>
+<p>npm run prisma:migrate</p>
+<br>
+<h1>启动开发服务器</h1>
+<p>npm run dev</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+### 环境变量配置
+
+参考 `backend/.env.example` 文件，配置以下必要环境变量：
+
+- `DATABASE_URL`: MySQL数据库连接字符串
+- `JWT_SECRET`: JWT密钥
+- `WECHAT_APP_ID`: 微信开放平台AppID
+- `WECHAT_APP_SECRET`: 微信开放平台AppSecret
+- `DINGTALK_APP_ID`: 钉钉开放平台AppID
+- `DINGTALK_APP_SECRET`: 钉钉开放平台AppSecret
+
+### 使用Docker
+
+</pre></div>
+<h1>启动所有服务</h1>
+<p>cd docker</p>
+<p>docker-compose up -d</p>
+<br>
+<h1>查看日志</h1>
+<p>docker-compose logs -f</p>
+<br>
+<h1>停止服务</h1>
+<p>docker-compose down</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+## API文档
+
+API基础路径：`http://localhost:3000/api/v1`
+
+### 认证接口
+
+- `GET /auth/wechat/auth-url` - 获取微信登录URL
+- `GET /wechat/callback` - 微信OAuth回调
+- `GET /auth/dingtalk/auth-url` - 获取钉钉登录URL
+- `GET /dingtalk/callback` - 钉钉OAuth回调
+- `POST /auth/refresh` - 刷新Token
+- `POST /auth/logout` - 登出
+- `GET /auth/me` - 获取当前用户信息
+
+### 项目接口
+
+- `GET /projects` - 获取项目列表
+- `POST /projects` - 创建项目
+- `GET /projects/:id` - 获取项目详情
+- `PUT /projects/:id` - 更新项目
+- `DELETE /projects/:id` - 删除项目
+- `GET /projects/:id/members` - 获取项目成员
+- `POST /projects/:id/members` - 添加成员
+- `DELETE /projects/:id/members/:userId` - 移除成员
+
+### 任务接口
+
+- `GET /tasks/project/:projectId` - 获取项目任务列表
+- `POST /tasks` - 创建任务
+- `GET /tasks/:id` - 获取任务详情
+- `PUT /tasks/:id` - 更新任务
+- `PATCH /tasks/:id/status` - 更新任务状态
+- `DELETE /tasks/:id` - 删除任务
+
+## 开发
+
+### 运行测试
+
+</pre></div>
+<p>cd backend</p>
+<p>npm test</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+### 代码规范
+
+</pre></div>
+<h1>格式化代码</h1>
+<p>npm run format</p>
+<br>
+<h1>检查代码规范</h1>
+<p>npm run lint</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+## 部署
+
+详细部署文档请参考 [docs/deployment.md](docs/deployment.md)
+
+## License
+
+MIT
+</pre></div>
+<br>
+<li>[ ] <strong>Step 2: 创建部署文档</strong></li>
+<br>
+<div class="code-block"><div class="code-header"><span>markdown</span></div><pre class="language-markdown"># 部署文档
+
+本文档提供项目管理系统在不同环境下的部署指南。
+
+## 生产环境部署
+
+### 使用Docker部署
+
+1. **准备环境变量文件**
+
+</pre></div>
+<p>cp .env.example .env.production</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+编辑 `.env.production`，填写生产环境配置：
+
+</pre></div>
+<p>NODE_ENV=production</p>
+<p>DATABASE_URL=mysql://user:password@mysql-host:3306/project_management</p>
+<p>JWT_SECRET=your-production-secret-key</p>
+<p>WECHAT_APP_ID=your-wechat-app-id</p>
+<p>WECHAT_APP_SECRET=your-wechat-app-secret</p>
+<p>DINGTALK_APP_ID=your-dingtalk-app-id</p>
+<p>DINGTALK_APP_SECRET=your-dingtalk-app-secret</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+2. **使用Docker Compose启动**
+
+</pre></div>
+<p>cd docker</p>
+<p>docker-compose -f docker-compose.yml --env-file ../.env.production up -d</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+3. **验证部署**
+
+访问健康检查接口：`http://your-domain/health`
+
+### 手动部署
+
+#### 1. 服务器准备
+
+- 操作系统：Ubuntu 20.04+ 或 CentOS 8+
+- Node.js 20+
+- MySQL 8.0+
+- Nginx（可选，用于反向代理）
+
+#### 2. 数据库配置
+
+</pre></div>
+<h1>登录MySQL</h1>
+<p>mysql -u root -p</p>
+<br>
+<h1>创建数据库</h1>
+<p>CREATE DATABASE project_management CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;</p>
+<br>
+<h1>创建用户</h1>
+<p>CREATE USER 'project_user'@'%' IDENTIFIED BY 'secure_password';</p>
+<p>GRANT ALL PRIVILEGES ON project_management.* TO 'project_user'@'%';</p>
+<p>FLUSH PRIVILEGES;</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+#### 3. 部署后端
+
+</pre></div>
+<h1>上传代码到服务器</h1>
+<p>scp -r backend user@server:/path/to/</p>
+<br>
+<h1>安装依赖</h1>
+<p>cd /path/to/backend</p>
+<p>npm ci --only=production</p>
+<br>
+<h1>配置环境变量</h1>
+<p>cp .env.example .env</p>
+<h1>编辑.env文件</h1>
+<br>
+<h1>构建项目</h1>
+<p>npm run build</p>
+<br>
+<h1>运行数据库迁移</h1>
+<p>npm run prisma:migrate</p>
+<br>
+<h1>使用PM2管理进程</h1>
+<p>npm install -g pm2</p>
+<p>pm2 start dist/server.js --name "project-management-backend"</p>
+<p>pm2 save</p>
+<p>pm2 startup</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+#### 4. 配置Nginx反向代理（可选）
+
+</pre></div>
+<p>server {</p>
+<p>    listen 80;</p>
+<p>    server_name your-domain.com;</p>
+<br>
+<p>    location / {</p>
+<p>        proxy_pass http://localhost:3000;</p>
+<p>        proxy_http_version 1.1;</p>
+<p>        proxy_set_header Upgrade $http_upgrade;</p>
+<p>        proxy_set_header Connection 'upgrade';</p>
+<p>        proxy_set_header Host $host;</p>
+<p>        proxy_cache_bypass $http_upgrade;</p>
+<p>        proxy_set_header X-Real-IP $remote_addr;</p>
+<p>        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</p>
+<p>        proxy_set_header X-Forwarded-Proto $scheme;</p>
+<p>    }</p>
+<p>}</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+#### 5. 配置SSL（推荐）
+
+使用Let&#039;s Encrypt免费证书：
+
+</pre></div>
+<p>sudo apt install certbot python3-certbot-nginx</p>
+<p>sudo certbot --nginx -d your-domain.com</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+## 监控和维护
+
+### 日志
+
+</pre></div>
+<h1>PM2日志</h1>
+<p>pm2 logs project-management-backend</p>
+<br>
+<h1>应用日志</h1>
+<p>tail -f /path/to/backend/logs/app.log</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+### 数据库备份
+
+</pre></div>
+<h1>备份</h1>
+<p>mysqldump -u project_user -p project_management > backup_$(date +%Y%m%d).sql</p>
+<br>
+<h1>恢复</h1>
+<p>mysql -u project_user -p project_management < backup_20240401.sql</p>
+<div class="code-block"><div class="code-header"><span>text</span></div><pre class="language-text">
+### 性能监控
+
+推荐使用以下工具：
+- PM2 Plus：进程监控
+- Grafana + Prometheus：系统监控
+- Sentry：错误追踪
+
+## 故障排查
+
+### 常见问题
+
+1. **数据库连接失败**
+
+检查 `DATABASE_URL` 配置是否正确，确保MySQL服务运行正常。
+
+2. **端口被占用**
+
+修改 `backend/.env` 中的 `PORT` 配置。
+
+3. **OAuth登录失败**
+
+检查微信/钉钉AppID和AppSecret配置，确保回调URL配置正确。
+
+## 安全建议
+
+1. 定期更新依赖包
+2. 使用强密码和密钥
+3. 启用HTTPS
+4. 配置防火墙规则
+5. 定期备份数据
+6. 限制数据库远程访问
+
+
+    </div>
+</body>
+</html>

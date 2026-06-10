@@ -1,0 +1,2 @@
+function e(e,t=`操作失败`){if(!e)return{success:!1,message:`无响应数据`};let n=e;return typeof e==`object`&&`data`in e&&typeof e.status==`number`&&(n=e.data),typeof n==`object`&&`code`in n?n.code===200?{success:!0,data:n.data}:{success:!1,message:n.message||t}:typeof n==`object`&&`data`in n&&!(`code`in n)?{success:!0,data:n.data}:n===!0||n===`success`?{success:!0}:{success:!0,data:n}}export{e as t};
+//# sourceMappingURL=response-Cu9aELDu.js.map
