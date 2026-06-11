@@ -13,7 +13,9 @@ import com.xiangmuguanli.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,8 +75,10 @@ public class ScheduleService {
         return EventResponse.fromEntity(event);
     }
 
-    public List<EventResponse> getEventsByUserAndDateRange(Long userId, LocalDateTime start, LocalDateTime end) {
-        return eventRepository.findByUserIdAndStartTimeBetween(userId, start, end)
+    public List<EventResponse> getEventsByUserAndDateRange(Long userId, LocalDate start, LocalDate end) {
+        LocalDateTime startDateTime = start.atStartOfDay();
+        LocalDateTime endDateTime = end.atTime(LocalTime.MAX);
+        return eventRepository.findByUserIdAndStartTimeBetween(userId, startDateTime, endDateTime)
                 .stream()
                 .map(EventResponse::fromEntity)
                 .collect(Collectors.toList());

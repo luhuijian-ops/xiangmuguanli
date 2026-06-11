@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -51,8 +52,8 @@ public class ScheduleController {
     @PreAuthorize("@scheduleService.isSelfOrAdmin(#userId, authentication.name)")
     public ResponseEntity<ApiResponse<List<EventResponse>>> getEventsByUserAndDateRange(
             @PathVariable Long userId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
         List<EventResponse> events = scheduleService.getEventsByUserAndDateRange(userId, start, end);
         return ResponseEntity.ok(ApiResponse.success(events));
     }
