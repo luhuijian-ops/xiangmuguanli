@@ -37,15 +37,15 @@
 
     <el-tabs v-model="activeTab">
       <el-tab-pane label="项目统计" name="project">
-        <project-statistics :project-id="selectedProjectId" />
+        <project-statistics :project-id="selectedProjectId" :date-range="dateRange" />
       </el-tab-pane>
 
       <el-tab-pane label="个人统计" name="user">
-        <user-statistics />
+        <user-statistics :date-range="dateRange" />
       </el-tab-pane>
 
       <el-tab-pane label="团队统计" name="team">
-        <team-statistics />
+        <team-statistics :date-range="dateRange" />
       </el-tab-pane>
     </el-tabs>
   </div>

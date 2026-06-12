@@ -3,7 +3,6 @@ import request from './request'
 export const workHourApi = {
   // 创建工时记录
   createWorkHour: (data: {
-    userId: number
     projectId?: number
     taskId?: number
     hours: number

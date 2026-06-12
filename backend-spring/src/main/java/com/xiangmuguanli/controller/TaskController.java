@@ -4,12 +4,16 @@ import com.xiangmuguanli.dto.response.ApiResponse;
 import com.xiangmuguanli.dto.response.TaskResponse;
 import com.xiangmuguanli.entity.Task;
 import com.xiangmuguanli.enums.TaskStatus;
+import com.xiangmuguanli.service.ProjectService;
 import com.xiangmuguanli.service.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -21,15 +25,22 @@ import java.util.Map;
 public class TaskController {
 
     private final TaskService taskService;
+    private final ProjectService projectService;
 
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, ProjectService projectService) {
         this.taskService = taskService;
+        this.projectService = projectService;
     }
 
     @GetMapping
-    @PreAuthorize("@projectService.checkProjectAccess(#projectId, authentication.name)")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Page<TaskResponse>>> getTasksByProject(
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long projectId, Pageable pageable) {
+        if (!projectService.checkProjectAccess(projectId, userDetails.getUsername())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.error(403, "You don't have access to this project"));
+        }
         Page<TaskResponse> tasks = taskService.getTasksByProject(projectId, pageable);
         return ResponseEntity.ok(ApiResponse.success(tasks));
     }

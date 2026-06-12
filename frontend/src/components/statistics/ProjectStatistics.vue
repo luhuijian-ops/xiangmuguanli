@@ -1,5 +1,11 @@
 <template>
   <div class="project-statistics">
+    <div class="toolbar">
+      <el-button type="success" :icon="Download" @click="exportReport" :disabled="!statistics">
+        导出报表
+      </el-button>
+    </div>
+
     <div v-if="loading" class="loading-container">
       <el-skeleton :rows="8" animated />
     </div>
@@ -7,7 +13,7 @@
     <div v-else-if="statistics">
       <!-- 概览卡片 -->
       <el-row :gutter="20" class="overview-cards">
-        <el-col :span="6">
+        <el-col :span="4">
           <el-card class="stat-card">
             <div class="stat-icon">
               <el-icon :size="30" color="#667eea">
@@ -21,7 +27,7 @@
           </el-card>
         </el-col>
 
-        <el-col :span="6">
+        <el-col :span="4">
           <el-card class="stat-card">
             <div class="stat-icon">
               <el-icon :size="30" color="#52c41a">
@@ -35,7 +41,7 @@
           </el-card>
         </el-col>
 
-        <el-col :span="6">
+        <el-col :span="4">
           <el-card class="stat-card">
             <div class="stat-icon">
               <el-icon :size="30" color="#faad14">
@@ -49,7 +55,7 @@
           </el-card>
         </el-col>
 
-        <el-col :span="6">
+        <el-col :span="4">
           <el-card class="stat-card">
             <div class="stat-icon">
               <el-icon :size="30" color="#f5222d">
@@ -59,6 +65,34 @@
             <div class="stat-info">
               <div class="stat-value">{{ statistics.todoTasks || 0 }}</div>
               <div class="stat-label">待处理</div>
+            </div>
+          </el-card>
+        </el-col>
+
+        <el-col :span="4">
+          <el-card class="stat-card">
+            <div class="stat-icon">
+              <el-icon :size="30" color="#ff4d4f">
+                <Warning />
+              </el-icon>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value">{{ statistics.overdueTasks || 0 }}</div>
+              <div class="stat-label">延期任务</div>
+            </div>
+          </el-card>
+        </el-col>
+
+        <el-col :span="4">
+          <el-card class="stat-card">
+            <div class="stat-icon">
+              <el-icon :size="30" color="#ff7875">
+                <WarningFilled />
+              </el-icon>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value">{{ statistics.overdueRate || 0 }}%</div>
+              <div class="stat-label">延期率</div>
             </div>
           </el-card>
         </el-col>
@@ -124,6 +158,29 @@
           </el-card>
         </el-col>
       </el-row>
+
+      <el-row :gutter="20" class="charts-row">
+        <!-- 活动时间轴 -->
+        <el-col :span="24">
+          <el-card>
+            <template #header>
+              <div class="card-header">
+                <span>活动时间轴</span>
+              </div>
+            </template>
+            <el-timeline v-if="recentActivity.length > 0">
+              <el-timeline-item
+                v-for="item in recentActivity"
+                :key="item.id"
+                :timestamp="formatActivityTime(item.createdAt)"
+              >
+                {{ item.userName || '系统' }} {{ actionText(item.action) }} {{ entityText(item.entityType) }} #{{ item.entityId }}
+              </el-timeline-item>
+            </el-timeline>
+            <el-empty v-else description="暂无活动记录" />
+          </el-card>
+        </el-col>
+      </el-row>
     </div>
 
     <div v-else class="empty-state">
@@ -136,13 +193,14 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
-import { Document, CircleCheck, Clock } from '@element-plus/icons-vue'
+import { Document, CircleCheck, Clock, Download, Warning, WarningFilled } from '@element-plus/icons-vue'
 import { useStatistics } from '@/composables/useStatistics'
 import dayjs from 'dayjs'
 import * as echarts from 'echarts'
 
 interface Props {
   projectId?: string
+  dateRange?: [string, string] | null
 }
 
 const props = defineProps<Props>()
@@ -162,13 +220,49 @@ const completionRate = computed(() => {
   return Math.round((statistics.value.doneTasks / statistics.value.totalTasks) * 100)
 })
 
+const recentActivity = computed(() => {
+  return statistics.value?.recentActivity || []
+})
+
+const formatActivityTime = (time?: string) => {
+  if (!time) return ''
+  return dayjs(time).format('YYYY-MM-DD HH:mm')
+}
+
+const actionText = (action?: string) => {
+  const map: Record<string, string> = {
+    CREATE: '创建',
+    UPDATE: '更新',
+    DELETE: '删除',
+    STATUS_CHANGE: '变更状态',
+    ASSIGN: '分配',
+    COMMENT: '评论',
+    UPLOAD: '上传',
+  }
+  return map[action || ''] || action || '操作'
+}
+
+const entityText = (entityType?: string) => {
+  const map: Record<string, string> = {
+    TASK: '任务',
+    PROJECT: '项目',
+    COMMENT: '评论',
+    FILE: '文件',
+    WORK_HOUR: '工时',
+    EVENT: '日程',
+    MILESTONE: '里程碑',
+  }
+  return map[entityType || ''] || entityType || '对象'
+}
+
 const loadStatistics = async () => {
   if (!props.projectId) {
     statistics.value = null
     return
   }
 
-  const result = await fetchProjectStatistics(props.projectId)
+  const [startDate, endDate] = props.dateRange || [undefined, undefined]
+  const result = await fetchProjectStatistics(props.projectId, startDate, endDate)
   if (result.success) {
     statistics.value = result.data
     setTimeout(() => {
@@ -304,12 +398,44 @@ const getProgressColor = (percentage: number) => {
 }
 
 watch(
-  () => props.projectId,
+  () => [props.projectId, props.dateRange],
   () => {
     loadStatistics()
   },
   { immediate: true }
 )
+
+const exportReport = () => {
+  if (!statistics.value) return
+
+  const s = statistics.value
+  const lines = [
+    ['指标', '数值'],
+    ['总任务数', s.totalTasks || 0],
+    ['已完成', s.doneTasks || 0],
+    ['进行中', s.doingTasks || 0],
+    ['待处理', s.todoTasks || 0],
+    ['延期任务', s.overdueTasks || 0],
+    ['延期率', `${s.overdueRate || 0}%`],
+    ['完成率', `${completionRate.value}%`],
+    [],
+    ['优先级', '数量'],
+    ...Object.entries(s.priorityDistribution || {}).map(([k, v]) => [k, v]),
+    [],
+    ['成员', '任务数'],
+    ...Object.entries(s.memberContributions || {}).map(([k, v]) => [k, v]),
+  ]
+
+  const csv = lines.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n')
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = `项目统计报表_${props.projectId}_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.csv`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(link.href)
+}
 
 onMounted(() => {
   window.addEventListener('resize', () => {
@@ -329,6 +455,12 @@ onUnmounted(() => {
 <style scoped>
 .project-statistics {
   padding: 10px 0;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 }
 
 .loading-container {

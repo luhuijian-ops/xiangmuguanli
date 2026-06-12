@@ -9,7 +9,16 @@
       label-width="100px"
       label-position="top"
     >
-      <el-form-item v-if="!hasProjectId" label="所属项目" prop="projectId">
+      <el-form-item v-if="isEdit" label="所属项目">
+        <el-input
+          :model-value="currentProjectName"
+          disabled
+          placeholder="当前项目"
+          style="width: 100%"
+        />
+      </el-form-item>
+
+      <el-form-item v-else-if="!hasProjectId" label="所属项目" prop="projectId">
         <el-select
           v-model="selectedProjectId"
           placeholder="请选择项目"
@@ -22,6 +31,15 @@
             :label="project.name"
             :value="String(project.id)"
           />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item v-if="isEdit" label="任务状态" prop="status">
+        <el-select v-model="formData.status" placeholder="请选择状态" style="width: 100%">
+          <el-option label="待处理" value="TODO" />
+          <el-option label="进行中" value="DOING" />
+          <el-option label="已完成" value="DONE" />
+          <el-option label="已归档" value="ARCHIVED" />
         </el-select>
       </el-form-item>
 
@@ -139,12 +157,22 @@ const isEdit = computed(() => !!props.task)
 const hasProjectId = computed(() => !!props.projectId && props.projectId !== '0')
 const activeProjectId = computed(() => hasProjectId.value ? props.projectId : selectedProjectId.value)
 
+const currentProjectName = computed(() => {
+  if (props.task?.projectName) return props.task.projectName
+  if (props.task?.projectId) {
+    const project = projects.value.find(p => String(p.id) === String(props.task!.projectId))
+    return project?.name || `项目 #${props.task.projectId}`
+  }
+  return ''
+})
+
 const tagsInput = ref('')
 
 const formData = reactive({
   title: '',
   description: '',
   priority: 3,
+  status: '' as Task['status'] | '',
   assigneeId: undefined as number | undefined,
   startDate: '',
   dueDate: '',
@@ -183,21 +211,25 @@ const initFormData = () => {
       title: props.task.title,
       description: props.task.description || '',
       priority: props.task.priority,
+      status: props.task.status || 'TODO',
       assigneeId: props.task.assigneeId || undefined,
       startDate: props.task.startDate || '',
       dueDate: props.task.dueDate || '',
     })
     tagsInput.value = parseTags(props.task.tags)
+    selectedProjectId.value = props.task.projectId ? String(props.task.projectId) : ''
   } else {
     Object.assign(formData, {
       title: '',
       description: '',
       priority: 3,
+      status: '',
       assigneeId: undefined,
       startDate: '',
       dueDate: '',
     })
     tagsInput.value = ''
+    selectedProjectId.value = props.projectId || ''
   }
 }
 
@@ -226,15 +258,20 @@ const handleSubmit = async () => {
       tags: tags.length > 0 ? JSON.stringify(tags) : undefined,
     }
 
-    const pid = activeProjectId.value
-    if (!pid) {
-      ElMessage.error('请选择所属项目')
-      return
-    }
-
     if (isEdit.value) {
+      submitData.status = formData.status
+      const pid = props.task?.projectId
+      if (!pid) {
+        ElMessage.error('缺少项目信息，无法更新任务')
+        return
+      }
       emit('submit', { id: props.task!.id, ...submitData })
     } else {
+      const pid = activeProjectId.value
+      if (!pid) {
+        ElMessage.error('请选择所属项目')
+        return
+      }
       emit('submit', { ...submitData, projectId: pid })
     }
   } finally {
@@ -277,7 +314,6 @@ const onProjectChange = () => {
 // 监听 props 变化
 import { watch } from 'vue'
 watch(() => [props.task, props.projectId], () => {
-  selectedProjectId.value = props.projectId || ''
   initFormData()
 }, { immediate: true })
 onMounted(() => {

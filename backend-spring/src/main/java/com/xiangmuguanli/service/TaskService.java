@@ -44,7 +44,6 @@ public class TaskService {
 
     @Transactional(readOnly = true)
     public Page<TaskResponse> getTasksByProject(Long projectId, Pageable pageable) {
-        projectService.validateProjectAccess(projectId, null); // Check project exists
         return taskRepository.findByProjectId(projectId, pageable).map(TaskResponse::fromEntity);
     }
 

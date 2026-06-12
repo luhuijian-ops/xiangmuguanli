@@ -80,9 +80,22 @@
           </template>
         </el-table-column>
         <el-table-column prop="title" label="任务标题" width="200" />
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column prop="status" label="状态" width="140">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
+            <el-select
+              v-if="canEditStatus"
+              v-model="row.status"
+              size="small"
+              style="width: 110px"
+              :disabled="row.status === 'ARCHIVED'"
+              @change="(val: string) => handleStatusChange(row, val)"
+            >
+              <el-option label="待处理" value="TODO" />
+              <el-option label="进行中" value="DOING" />
+              <el-option label="已完成" value="DONE" />
+              <el-option label="已归档" value="ARCHIVED" />
+            </el-select>
+            <el-tag v-else :type="getStatusType(row.status)">
               {{ getStatusText(row.status) }}
             </el-tag>
           </template>
@@ -178,9 +191,10 @@ import { ElMessage, ElMessageBox, type MessageBoxType } from 'element-plus'
 import { Plus, Search, Refresh } from '@element-plus/icons-vue'
 import { useTask } from '@/composables/useTask'
 import { useUserStore } from '@/stores/user'
+import { projectApi } from '@/api'
 import TaskForm from '@/components/task/TaskForm.vue'
 import TaskDetailDialog from '@/components/task/TaskDetailDialog.vue'
-import type { Task } from '@/types'
+import type { Task, ProjectMember } from '@/types'
 import dayjs from 'dayjs'
 
 const userStore = useUserStore()
@@ -207,6 +221,7 @@ const taskDetailVisible = ref(false)
 const selectedTask = ref<Task | null>(null)
 const editingTask = ref<Task | null>(null)
 const currentProjectId = ref('')
+const currentUserRole = ref<'OWNER' | 'ADMIN' | 'MEMBER' | 'VIEWER' | ''>('')
 
 // 从路由获取项目 ID
 onMounted(() => {
@@ -214,6 +229,7 @@ onMounted(() => {
   if (projectId) {
     currentProjectId.value = projectId
     fetchTasks(projectId)
+    loadCurrentUserRole(projectId)
   } else if (userStore.userId) {
     // 没有项目 ID 时，获取当前用户的任务
     fetchTasksByAssignee(userStore.userId as string)
@@ -270,6 +286,10 @@ const filteredTasks = computed(() => {
   }
 
   return result
+})
+
+const canEditStatus = computed(() => {
+  return ['OWNER', 'ADMIN', 'MEMBER'].includes(currentUserRole.value)
 })
 
 const getStatusType = (status: string) => {
@@ -348,6 +368,35 @@ const handleTaskUpdate = async (taskData: Partial<Task>) => {
     } else {
       ElMessage.error(result.message || '更新失败')
     }
+  }
+}
+
+const loadCurrentUserRole = async (projectId: string) => {
+  try {
+    const response = await projectApi.getMembers(projectId)
+    if (response && response.data && response.data.code === 200) {
+      const members: ProjectMember[] = response.data.data || []
+      const currentMember = members.find(
+        m => String(m.userId) === String(userStore.userId)
+      )
+      currentUserRole.value = currentMember?.role || ''
+    }
+  } catch (error) {
+    console.error('加载项目成员角色失败:', error)
+  }
+}
+
+const handleStatusChange = async (task: Task, newStatus: string) => {
+  if (task.status === newStatus) return
+
+  const originalStatus = task.status
+  const result = await updateTaskStatus(String(task.id), newStatus)
+  if (result.success) {
+    ElMessage.success('状态更新成功')
+    task.status = newStatus as any
+  } else {
+    ElMessage.error(result.message || '状态更新失败')
+    task.status = originalStatus
   }
 }
 

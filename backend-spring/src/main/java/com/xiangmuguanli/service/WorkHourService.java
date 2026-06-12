@@ -40,10 +40,10 @@ public class WorkHourService {
     }
 
     @Transactional
-    public WorkHourResponse createWorkHour(Long userId, Long projectId, Long taskId,
+    public WorkHourResponse createWorkHour(String username, Long projectId, Long taskId,
                                             BigDecimal hours, LocalDate date, String description) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
         WorkHour workHour = new WorkHour();
         workHour.setUser(user);

@@ -113,6 +113,12 @@ import { useStatistics } from '@/composables/useStatistics'
 import { useUserStore } from '@/stores/user'
 import * as echarts from 'echarts'
 
+interface Props {
+  dateRange?: [string, string] | null
+}
+
+const props = defineProps<Props>()
+
 const userStore = useUserStore()
 const { loading, fetchUserStatistics } = useStatistics()
 

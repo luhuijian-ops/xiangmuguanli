@@ -325,7 +325,6 @@ const handleSubmit = async () => {
 
   submitting.value = true
   try {
-    const userId = userStore.userId as string
     if (editingWorkHour.value) {
       const response = await workHourApi.updateWorkHour(
         editingWorkHour.value.id.toString(),
@@ -344,7 +343,6 @@ const handleSubmit = async () => {
       }
     } else {
       const response = await workHourApi.createWorkHour({
-        userId: Number(userId),
         projectId: form.value.projectId,
         taskId: form.value.taskId,
         hours: form.value.hours,

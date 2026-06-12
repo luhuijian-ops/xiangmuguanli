@@ -22,8 +22,11 @@ public class StatisticsController {
 
     @GetMapping("/project/{projectId}")
     @PreAuthorize("@projectService.checkProjectAccess(#projectId, authentication.name)")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> getProjectStatistics(@PathVariable Long projectId) {
-        Map<String, Object> stats = statisticsService.getProjectStatistics(projectId);
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getProjectStatistics(
+            @PathVariable Long projectId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Map<String, Object> stats = statisticsService.getProjectStatistics(projectId, startDate, endDate);
         return ResponseEntity.ok(ApiResponse.success(stats));
     }
 

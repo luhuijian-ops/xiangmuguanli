@@ -7,11 +7,11 @@ export function useStatistics() {
   const errorMessage = ref('')
 
   // 获取项目统计数据
-  const fetchProjectStatistics = async (projectId: string) => {
+  const fetchProjectStatistics = async (projectId: string, startDate?: string, endDate?: string) => {
     loading.value = true
     errorMessage.value = ''
     try {
-      const response = await statisticsApi.getProjectStatistics(projectId)
+      const response = await statisticsApi.getProjectStatistics(projectId, startDate, endDate)
       const result = handleApiResponse(response, '获取统计数据失败')
       if (result.success && result.data) {
         return result

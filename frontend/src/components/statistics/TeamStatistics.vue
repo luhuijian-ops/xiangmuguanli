@@ -117,6 +117,12 @@ import { useStatistics } from '@/composables/useStatistics'
 import { useProject } from '@/composables/useProject'
 import * as echarts from 'echarts'
 
+interface Props {
+  dateRange?: [string, string] | null
+}
+
+const props = defineProps<Props>()
+
 const { loading, fetchTeamStatistics } = useStatistics()
 const { projects, fetchProjects } = useProject()
 

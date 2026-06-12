@@ -6,6 +6,8 @@ import com.xiangmuguanli.service.WorkHourService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -23,15 +25,15 @@ public class WorkHourController {
     }
 
     @PostMapping
-    @PreAuthorize("@workHourService.isSelfOrAdmin(#userId, authentication.name)")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<WorkHourResponse>> createWorkHour(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(required = false) Long projectId,
             @RequestParam(required = false) Long taskId,
             @RequestParam BigDecimal hours,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam(required = false) String description) {
-        WorkHourResponse workHour = workHourService.createWorkHour(userId, projectId, taskId, hours, date, description);
+        WorkHourResponse workHour = workHourService.createWorkHour(userDetails.getUsername(), projectId, taskId, hours, date, description);
         return ResponseEntity.ok(ApiResponse.success(workHour));
     }
 

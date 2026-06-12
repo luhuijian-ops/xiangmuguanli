@@ -32,9 +32,25 @@ public class StatisticsService {
     }
 
     public Map<String, Object> getProjectStatistics(Long projectId) {
+        return getProjectStatistics(projectId, null, null);
+    }
+
+    public Map<String, Object> getProjectStatistics(Long projectId, LocalDate startDate, LocalDate endDate) {
         Map<String, Object> stats = new HashMap<>();
 
         List<com.xiangmuguanli.entity.Task> tasks = taskRepository.findByProjectId(projectId);
+        if (startDate != null || endDate != null) {
+            final LocalDate start = startDate != null ? startDate : LocalDate.MIN;
+            final LocalDate end = endDate != null ? endDate : LocalDate.MAX;
+            tasks = tasks.stream()
+                    .filter(t -> t.getCreatedAt() != null)
+                    .filter(t -> {
+                        LocalDate createdAt = t.getCreatedAt().toLocalDate();
+                        return !createdAt.isBefore(start) && !createdAt.isAfter(end);
+                    })
+                    .toList();
+        }
+
         long totalTasks = tasks.size();
         long todoTasks = tasks.stream().filter(t -> t.getStatus() == com.xiangmuguanli.enums.TaskStatus.TODO).count();
         long doingTasks = tasks.stream().filter(t -> t.getStatus() == com.xiangmuguanli.enums.TaskStatus.DOING).count();
@@ -44,6 +60,18 @@ public class StatisticsService {
         stats.put("todoTasks", todoTasks);
         stats.put("doingTasks", doingTasks);
         stats.put("doneTasks", doneTasks);
+
+        // 延期任务：截止时间已过期且状态不是 DONE/ARCHIVED
+        java.time.LocalDate today = java.time.LocalDate.now();
+        long overdueTasks = tasks.stream()
+                .filter(t -> t.getDueDate() != null)
+                .filter(t -> t.getDueDate().isBefore(today))
+                .filter(t -> t.getStatus() != com.xiangmuguanli.enums.TaskStatus.DONE
+                        && t.getStatus() != com.xiangmuguanli.enums.TaskStatus.ARCHIVED)
+                .count();
+        int overdueRate = totalTasks == 0 ? 0 : (int) Math.round((double) overdueTasks / totalTasks * 100);
+        stats.put("overdueTasks", overdueTasks);
+        stats.put("overdueRate", overdueRate);
 
         // 优先级分布
         Map<String, Long> priorityDistribution = new HashMap<>();
@@ -63,6 +91,46 @@ public class StatisticsService {
                     memberContributions.merge(name, 1L, Long::sum);
                 });
         stats.put("memberContributions", memberContributions);
+
+        // 近 7 天任务创建趋势
+        java.util.List<String> dates = new java.util.ArrayList<>();
+        java.util.List<Long> createdTrend = new java.util.ArrayList<>();
+        for (int i = 6; i >= 0; i--) {
+            java.time.LocalDate date = today.minusDays(i);
+            dates.add(date.toString());
+            final java.time.LocalDate dayStart = date;
+            final java.time.LocalDate dayEnd = date.plusDays(1);
+            long createdCount = tasks.stream()
+                    .filter(t -> t.getCreatedAt() != null)
+                    .filter(t -> {
+                        java.time.LocalDate d = t.getCreatedAt().toLocalDate();
+                        return !d.isBefore(dayStart) && d.isBefore(dayEnd);
+                    })
+                    .count();
+            createdTrend.add(createdCount);
+        }
+        Map<String, Object> weeklyTrend = new HashMap<>();
+        weeklyTrend.put("dates", dates);
+        weeklyTrend.put("created", createdTrend);
+        stats.put("weeklyTrend", weeklyTrend);
+
+        // 活动时间轴（最近 20 条）
+        List<Map<String, Object>> recentActivity = activityRepository
+                .findByProjectIdOrderByCreatedAtDesc(projectId, org.springframework.data.domain.PageRequest.of(0, 20))
+                .getContent()
+                .stream()
+                .map(a -> {
+                    Map<String, Object> item = new HashMap<>();
+                    item.put("id", a.getId());
+                    item.put("action", a.getAction());
+                    item.put("entityType", a.getEntityType());
+                    item.put("entityId", a.getEntityId());
+                    item.put("userName", a.getUser() != null ? a.getUser().getName() : null);
+                    item.put("createdAt", a.getCreatedAt() != null ? a.getCreatedAt().toString() : null);
+                    return item;
+                })
+                .toList();
+        stats.put("recentActivity", recentActivity);
 
         return stats;
     }
