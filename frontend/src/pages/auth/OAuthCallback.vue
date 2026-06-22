@@ -35,24 +35,31 @@ onMounted(async () => {
     return
   }
 
-  // Determine platform from query param, fallback to checking the path or state
+  const state = route.query.state as string
+  const expectedState = sessionStorage.getItem('oauth_state')
+  sessionStorage.removeItem('oauth_state')
+  if (!state || state !== expectedState) {
+    statusText.value = '登录失败'
+    errorMessage.value = 'OAuth state 校验失败，请返回重试'
+    ElMessage.error('OAuth state 校验失败')
+    setTimeout(() => router.push('/login'), 2000)
+    return
+  }
+
+  // Determine platform from state first, fallback to query param for backward compatibility
   let loginPlatform: 'wechat' | 'dingtalk'
-  if (platform === 'wechat' || platform === 'dingtalk') {
+  if (state && state.startsWith('wechat')) {
+    loginPlatform = 'wechat'
+  } else if (state && state.startsWith('dingtalk')) {
+    loginPlatform = 'dingtalk'
+  } else if (platform === 'wechat' || platform === 'dingtalk') {
     loginPlatform = platform
   } else {
-    // Fallback: try to detect from state or use a default
-    const state = route.query.state as string
-    if (state && state.startsWith('wechat')) {
-      loginPlatform = 'wechat'
-    } else if (state && state.startsWith('dingtalk')) {
-      loginPlatform = 'dingtalk'
-    } else {
-      statusText.value = '登录失败'
-      errorMessage.value = '无法识别登录平台，请返回重试'
-      ElMessage.error('无法识别登录平台')
-      setTimeout(() => router.push('/login'), 2000)
-      return
-    }
+    statusText.value = '登录失败'
+    errorMessage.value = '无法识别登录平台，请返回重试'
+    ElMessage.error('无法识别登录平台')
+    setTimeout(() => router.push('/login'), 2000)
+    return
   }
 
   try {
@@ -61,7 +68,7 @@ onMounted(async () => {
       ? authApi.wechatLogin
       : authApi.dingtalkLogin
 
-    const response = await loginApi(code)
+    const response = await loginApi(code, state)
 
     if (response && response.data && response.data.code === 200) {
       const data = response.data.data

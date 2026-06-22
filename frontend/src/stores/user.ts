@@ -52,12 +52,12 @@ export const useUserStore = defineStore('user', {
       localStorage.setItem('refreshToken', token)
     },
 
-    async login(code: string, platform: 'wechat' | 'dingtalk') {
+    async login(code: string, platform: 'wechat' | 'dingtalk', state: string) {
       try {
         const api = platform === 'wechat'
           ? authApi.wechatLogin
           : authApi.dingtalkLogin
-        const response = await api(code)
+        const response = await api(code, state)
         if (response && response.data && response.data.code === 200) {
           const data = response.data.data
           this.setToken(data.accessToken || data.token)

@@ -16,17 +16,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.xiangmuguanli.exception.BadRequestException;
 import com.xiangmuguanli.exception.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Service
 public class DingTalkOAuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(DingTalkOAuthService.class);
+    private static final long STATE_TTL_MS = 10 * 60 * 1000L; // 10 minutes
+    private final ConcurrentMap<String, Long> stateStore = new ConcurrentHashMap<>();
 
     private final OAuthConfig oAuthConfig;
     private final UserRepository userRepository;
@@ -55,10 +65,18 @@ public class DingTalkOAuthService {
 
     public String getAuthUrl(String state, String redirectUri) {
         OAuthConfig.DingTalkConfig dingtalk = oAuthConfig.getDingtalk();
-        String finalRedirectUri = redirectUri != null ? redirectUri : dingtalk.getRedirectUri();
+        if (dingtalk.getAppId() == null || dingtalk.getAppId().isBlank()) {
+            throw new BadRequestException("钉钉登录未配置 appId");
+        }
+        String configuredRedirectUri = dingtalk.getRedirectUri();
+        String finalRedirectUri = redirectUri != null ? redirectUri : configuredRedirectUri;
         if (finalRedirectUri == null || finalRedirectUri.isEmpty()) {
             throw new IllegalStateException("DingTalk redirect URI is not configured");
         }
+        if (configuredRedirectUri != null && !configuredRedirectUri.isEmpty() && !configuredRedirectUri.equals(finalRedirectUri)) {
+            throw new IllegalArgumentException("Invalid DingTalk redirect URI");
+        }
+        stateStore.put(state, System.currentTimeMillis() + STATE_TTL_MS);
         return String.format(
             "https://login.dingtalk.com/oauth2/auth?client_id=%s&redirect_uri=%s&response_type=code&scope=openid&prompt=consent&state=%s",
             dingtalk.getAppId(),
@@ -69,11 +87,17 @@ public class DingTalkOAuthService {
 
     @Transactional
     public AuthResponse handleCallback(String code) {
-        return handleCallback(code, null, null);
+        return handleCallback(code, null, null, null);
     }
 
     @Transactional
     public AuthResponse handleCallback(String code, String ip, String device) {
+        return handleCallback(code, ip, device, null);
+    }
+
+    @Transactional
+    public AuthResponse handleCallback(String code, String ip, String device, String state) {
+        validateState(state);
         Map<String, String> userInfo = getDingTalkUserInfo(code);
 
         String openId = userInfo.get("openid");
@@ -130,8 +154,22 @@ public class DingTalkOAuthService {
         return new AuthResponse(accessToken, refreshToken, UserResponse.fromEntity(user));
     }
 
+    private void validateState(String state) {
+        if (state == null || state.isEmpty()) {
+            throw new UnauthorizedException("Missing OAuth state");
+        }
+        Long expiry = stateStore.remove(state);
+        if (expiry == null || expiry < System.currentTimeMillis()) {
+            throw new UnauthorizedException("Invalid or expired OAuth state");
+        }
+    }
+
     private Map<String, String> getDingTalkUserInfo(String code) {
         OAuthConfig.DingTalkConfig config = oAuthConfig.getDingtalk();
+        if (config.getAppId() == null || config.getAppId().isBlank()
+                || config.getAppSecret() == null || config.getAppSecret().isBlank()) {
+            throw new BadRequestException("钉钉登录配置不完整，请检查 appId 和 appSecret");
+        }
         RestTemplate restTemplate = new RestTemplate();
 
         // Step 1: Exchange code for user access token (DingTalk OAuth2.0)
@@ -148,7 +186,13 @@ public class DingTalkOAuthService {
         HttpEntity<Map<String, String>> request = new HttpEntity<>(tokenBody, headers);
 
         @SuppressWarnings("unchecked")
-        Map<String, Object> tokenResponse = restTemplate.postForObject(tokenUrl, request, Map.class);
+        Map<String, Object> tokenResponse;
+        try {
+            tokenResponse = restTemplate.postForObject(tokenUrl, request, Map.class);
+        } catch (HttpClientErrorException e) {
+            log.warn("DingTalk access token request failed: {}", e.getResponseBodyAsString());
+            throw new UnauthorizedException("DingTalk authentication failed");
+        }
 
         if (tokenResponse == null || tokenResponse.get("accessToken") == null) {
             String errMsg = tokenResponse != null && tokenResponse.get("message") != null
@@ -166,9 +210,15 @@ public class DingTalkOAuthService {
         userHeaders.set("x-acs-dingtalk-access-token", accessToken);
         HttpEntity<Void> userRequest = new HttpEntity<>(userHeaders);
 
-        ResponseEntity<Map> userResponse = restTemplate.exchange(
-            userInfoUrl, HttpMethod.GET, userRequest, Map.class
-        );
+        ResponseEntity<Map> userResponse;
+        try {
+            userResponse = restTemplate.exchange(
+                userInfoUrl, HttpMethod.GET, userRequest, Map.class
+            );
+        } catch (HttpClientErrorException e) {
+            log.warn("DingTalk user info request failed: {}", e.getResponseBodyAsString());
+            throw new UnauthorizedException("DingTalk authentication failed");
+        }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> userInfo = userResponse.getBody();

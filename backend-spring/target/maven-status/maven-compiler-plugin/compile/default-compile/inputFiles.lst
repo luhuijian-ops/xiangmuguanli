@@ -4,6 +4,7 @@ D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repositor
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\enums\MemberRole.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\security\JwtAuthenticationFilter.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\CommentController.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\config\OAuthConfigInitializer.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\AlertRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\config\DataInitializer.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\FileController.java
@@ -26,6 +27,7 @@ D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\reque
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\config\CorsConfig.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\response\WorkHourResponse.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\entity\TokenBlacklist.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\request\OAuthLoginRequest.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\response\ApiResponse.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\service\UserService.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\AuditController.java
@@ -37,7 +39,9 @@ D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\exception
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\config\JwtConfig.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\entity\Milestone.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\response\UserResponse.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\AdminConfigController.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\AuthController.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\request\DingTalkConfigRequest.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\AlertController.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\WorkHourController.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\service\ProjectService.java
@@ -48,6 +52,7 @@ D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\security\
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\service\WeChatOAuthService.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\UserBindingRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\entity\Role.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\SystemConfigRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\UserRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\request\RefreshTokenRequest.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\MilestoneController.java
@@ -55,6 +60,7 @@ D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repositor
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\service\AuditService.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\EventRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\config\FileConfig.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\entity\SystemConfig.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\UserController.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\ProjectMemberRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\service\AuthService.java
@@ -64,6 +70,7 @@ D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\reque
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\TaskDependencyRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\service\CommentService.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\XiangmuguanliApplication.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\response\DingTalkConfigResponse.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\response\MilestoneResponse.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\entity\ProjectMember.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\response\AlertResponse.java
@@ -81,11 +88,13 @@ D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\entity\Us
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\response\ProjectResponse.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\service\WorkHourService.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\entity\UserRole.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\util\ConfigCryptoUtil.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\entity\Event.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\entity\LoginLog.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\enums\UserStatus.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\dto\request\ProjectCreateRequest.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\HealthController.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\service\SystemConfigService.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\MilestoneRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\exception\GlobalExceptionHandler.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\exception\BadRequestException.java

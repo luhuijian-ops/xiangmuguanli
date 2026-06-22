@@ -115,6 +115,18 @@ const routes = [
           },
         ],
       },
+      {
+        path: 'dingtalk-config',
+        name: 'DingTalkConfigDoc',
+        component: () => import('@/pages/admin/DingTalkConfigDoc.vue'),
+        meta: { requiresAdmin: true },
+      },
+      {
+        path: 'dingtalk-admin-config',
+        name: 'DingTalkConfig',
+        component: () => import('@/pages/admin/DingTalkConfig.vue'),
+        meta: { requiresAdmin: true },
+      },
     ],
   },
 ]

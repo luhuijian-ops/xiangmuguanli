@@ -49,10 +49,12 @@
         </div>
 
         <div class="login-buttons">
+          <!-- 微信登录暂时关闭
           <button @click="handleWeChatLogin" class="login-btn wechat">
             <span>💬</span>
             <span>微信登录</span>
           </button>
+          -->
           <button @click="handleDingTalkLogin" class="login-btn dingtalk">
             <span>⚙️</span>
             <span>钉钉登录</span>
@@ -73,10 +75,12 @@
             <span>🔐</span>
             <span>用户名密码登录</span>
           </button>
+          <!-- 微信登录暂时关闭
           <button @click="handleWeChatLogin" class="login-btn wechat">
             <span>💬</span>
             <span>微信登录</span>
           </button>
+          -->
           <button @click="handleDingTalkLogin" class="login-btn dingtalk">
             <span>⚙️</span>
             <span>钉钉登录</span>
@@ -136,9 +140,6 @@ const handlePasswordLogin = async () => {
 
       try {
         const response = await authApi.login(loginForm.username, loginForm.password)
-        console.log('Login response:', response)
-        console.log('response.data:', response?.data)
-        console.log('response.data.data:', response?.data?.data)
 
         if (response && response.data && response.data.code === 200) {
           // 更新userStore的token
@@ -149,19 +150,15 @@ const handlePasswordLogin = async () => {
           userStore.setUserInfo(response.data.data.user)
 
           ElMessage.success('登录成功')
-          console.log('Token saved, redirecting...')
 
           // 跳转到重定向地址或首页
           const redirect = route.query.redirect as string
           const target = redirect || '/'
-          console.log('Redirect target:', target)
 
           // 使用 replace 而非 push，避免导航问题
           await router.replace(target)
-          console.log('After replace, current route:', router.currentRoute.value.path)
         } else {
           errorMessage.value = response?.data?.message || '登录失败'
-          console.log('Login failed, response:', response)
         }
       } catch (error: any) {
         console.error('登录失败:', error)
@@ -179,10 +176,11 @@ const handlePasswordLogin = async () => {
 const handleWeChatLogin = async () => {
   try {
     loading.value = true
-    const redirectUri = window.location.origin + '/oauth/callback?platform=wechat'
+    const redirectUri = window.location.origin + '/oauth/callback'
     const response = await authApi.getWeChatAuthUrl(redirectUri)
 
     if (response && response.data && response.data.code === 200) {
+      sessionStorage.setItem('oauth_state', response.data.data.state)
       window.location.href = response.data.data.url
     } else {
       ElMessage.error('获取微信授权链接失败')
@@ -201,10 +199,11 @@ const handleWeChatLogin = async () => {
 const handleDingTalkLogin = async () => {
   try {
     loading.value = true
-    const redirectUri = window.location.origin + '/oauth/callback?platform=dingtalk'
+    const redirectUri = window.location.origin + '/oauth/callback'
     const response = await authApi.getDingTalkAuthUrl(redirectUri)
 
     if (response && response.data && response.data.code === 200) {
+      sessionStorage.setItem('oauth_state', response.data.data.state)
       window.location.href = response.data.data.url
     } else {
       ElMessage.error('获取钉钉授权链接失败')

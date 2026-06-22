@@ -14,25 +14,25 @@ export const authApi = {
     request.get('/api/v1/oauth/wechat/url', { params: { redirectUri } }),
 
   // 微信回调（后端直接回调时使用）
-  weChatCallback: (code: string) => request.get(`/api/v1/oauth/wechat/callback?code=${code}`),
+  weChatCallback: (code: string, state: string) => request.get(`/api/v1/oauth/wechat/callback?code=${code}&state=${state}`),
 
   // 获取钉钉登录授权 URL
   getDingTalkAuthUrl: (redirectUri?: string) =>
     request.get('/api/v1/oauth/dingtalk/url', { params: { redirectUri } }),
 
   // 钉钉回调（后端直接回调时使用）
-  dingTalkCallback: (code: string) => request.get(`/api/v1/oauth/dingtalk/callback?code=${code}`),
+  dingTalkCallback: (code: string, state: string) => request.get(`/api/v1/oauth/dingtalk/callback?code=${code}&state=${state}`),
 
   // 刷新 Token
   refreshToken: (refreshToken: string) => request.post('/api/v1/auth/refresh', { refreshToken }),
 
-  // 微信直接登录（POST code 换 token）
-  wechatLogin: (code: string) =>
-    request.post('/api/v1/auth/wechat/login', { code }),
+  // 微信直接登录（POST code + state 换 token）
+  wechatLogin: (code: string, state: string) =>
+    request.post('/api/v1/auth/wechat/login', { code, state }),
 
-  // 钉钉直接登录（POST code 换 token）
-  dingtalkLogin: (code: string) =>
-    request.post('/api/v1/auth/dingtalk/login', { code }),
+  // 钉钉直接登录（POST code + state 换 token）
+  dingtalkLogin: (code: string, state: string) =>
+    request.post('/api/v1/auth/dingtalk/login', { code, state }),
 
   // 获取当前用户信息
   getCurrentUser: () => request.get('/api/v1/auth/me'),

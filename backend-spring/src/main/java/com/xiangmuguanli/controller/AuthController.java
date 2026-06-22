@@ -1,6 +1,7 @@
 package com.xiangmuguanli.controller;
 
 import com.xiangmuguanli.dto.request.LoginRequest;
+import com.xiangmuguanli.dto.request.OAuthLoginRequest;
 import com.xiangmuguanli.dto.request.RefreshTokenRequest;
 import com.xiangmuguanli.dto.request.RegisterRequest;
 import com.xiangmuguanli.dto.response.ApiResponse;
@@ -75,23 +76,21 @@ public class AuthController {
 
     @PostMapping("/wechat/login")
     public ResponseEntity<ApiResponse<AuthResponse>> wechatLogin(
-            @RequestBody Map<String, String> request,
+            @Valid @RequestBody OAuthLoginRequest request,
             HttpServletRequest httpRequest) {
-        String code = request.get("code");
         String ip = httpRequest.getRemoteAddr();
         String device = httpRequest.getHeader("User-Agent");
-        AuthResponse response = weChatOAuthService.handleCallback(code, ip, device);
+        AuthResponse response = weChatOAuthService.handleCallback(request.getCode(), ip, device, request.getState());
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @PostMapping("/dingtalk/login")
     public ResponseEntity<ApiResponse<AuthResponse>> dingtalkLogin(
-            @RequestBody Map<String, String> request,
+            @Valid @RequestBody OAuthLoginRequest request,
             HttpServletRequest httpRequest) {
-        String code = request.get("code");
         String ip = httpRequest.getRemoteAddr();
         String device = httpRequest.getHeader("User-Agent");
-        AuthResponse response = dingTalkOAuthService.handleCallback(code, ip, device);
+        AuthResponse response = dingTalkOAuthService.handleCallback(request.getCode(), ip, device, request.getState());
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

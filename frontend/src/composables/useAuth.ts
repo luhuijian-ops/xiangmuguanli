@@ -9,8 +9,8 @@ export function useAuth() {
   /**
    * 处理登录
    */
-  const handleLogin = async (code: string, platform: 'wechat' | 'dingtalk') => {
-    const result = await userStore.login(code, platform)
+  const handleLogin = async (code: string, platform: 'wechat' | 'dingtalk', state: string) => {
+    const result = await userStore.login(code, platform, state)
 
     if (result.success) {
       // 跳转到重定向地址或首页

@@ -27,7 +27,7 @@ public class OAuthController {
     @GetMapping("/wechat/url")
     public ResponseEntity<ApiResponse<Map<String, String>>> getWeChatAuthUrl(
             @RequestParam(required = false) String redirectUri) {
-        String state = UUID.randomUUID().toString();
+        String state = "wechat_" + UUID.randomUUID();
         String url = weChatOAuthService.getAuthUrl(state, redirectUri);
         return ResponseEntity.ok(ApiResponse.success(Map.of("url", url, "state", state)));
     }
@@ -35,17 +35,18 @@ public class OAuthController {
     @GetMapping("/wechat/callback")
     public ResponseEntity<ApiResponse<AuthResponse>> weChatCallback(
             @RequestParam String code,
+            @RequestParam String state,
             HttpServletRequest httpRequest) {
         String ip = httpRequest.getRemoteAddr();
         String device = httpRequest.getHeader("User-Agent");
-        AuthResponse response = weChatOAuthService.handleCallback(code, ip, device);
+        AuthResponse response = weChatOAuthService.handleCallback(code, ip, device, state);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping("/dingtalk/url")
     public ResponseEntity<ApiResponse<Map<String, String>>> getDingTalkAuthUrl(
             @RequestParam(required = false) String redirectUri) {
-        String state = UUID.randomUUID().toString();
+        String state = "dingtalk_" + UUID.randomUUID();
         String url = dingTalkOAuthService.getAuthUrl(state, redirectUri);
         return ResponseEntity.ok(ApiResponse.success(Map.of("url", url, "state", state)));
     }
@@ -53,10 +54,11 @@ public class OAuthController {
     @GetMapping("/dingtalk/callback")
     public ResponseEntity<ApiResponse<AuthResponse>> dingTalkCallback(
             @RequestParam String code,
+            @RequestParam String state,
             HttpServletRequest httpRequest) {
         String ip = httpRequest.getRemoteAddr();
         String device = httpRequest.getHeader("User-Agent");
-        AuthResponse response = dingTalkOAuthService.handleCallback(code, ip, device);
+        AuthResponse response = dingTalkOAuthService.handleCallback(code, ip, device, state);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

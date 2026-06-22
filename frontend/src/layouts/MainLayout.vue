@@ -78,6 +78,14 @@
               <span>🚨</span>
               <span>告警列表</span>
             </router-link>
+            <router-link to="/dingtalk-config" class="nav-item sub-item">
+              <span>📖</span>
+              <span>钉钉配置文档</span>
+            </router-link>
+            <router-link to="/dingtalk-admin-config" class="nav-item sub-item">
+              <span>⚙️</span>
+              <span>钉钉配置</span>
+            </router-link>
           </div>
         </div>
       </nav>
