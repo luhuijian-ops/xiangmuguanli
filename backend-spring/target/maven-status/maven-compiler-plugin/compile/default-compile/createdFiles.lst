@@ -30,6 +30,7 @@ com\xiangmuguanli\controller\UserController.class
 com\xiangmuguanli\controller\TaskController.class
 com\xiangmuguanli\service\WeChatOAuthService.class
 com\xiangmuguanli\service\FileService.class
+com\xiangmuguanli\controller\PublicConfigController.class
 com\xiangmuguanli\repository\RoleRepository.class
 com\xiangmuguanli\entity\FileEntity.class
 com\xiangmuguanli\enums\MemberRole.class

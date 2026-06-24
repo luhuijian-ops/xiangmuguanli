@@ -1,3 +1,4 @@
 com\xiangmuguanli\service\StatisticsServiceTest.class
+com\xiangmuguanli\service\DingTalkLoginSwitchTest.class
 com\xiangmuguanli\XiangmuguanliApplicationTests.class
 com\xiangmuguanli\controller\TaskControllerTest.class

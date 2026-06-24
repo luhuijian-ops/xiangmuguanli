@@ -8,6 +8,7 @@ D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\config\OA
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\AlertRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\config\DataInitializer.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\FileController.java
+D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\PublicConfigController.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\controller\NotificationController.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\TokenBlacklistRepository.java
 D:\AIcode\xiangmuguanli\backend-spring\src\main\java\com\xiangmuguanli\repository\CommentRepository.java

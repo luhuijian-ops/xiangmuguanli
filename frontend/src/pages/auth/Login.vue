@@ -44,9 +44,11 @@
           </el-form-item>
         </el-form>
 
+        <!-- 「其他登录方式」分隔条已按需注释隐藏
         <div class="login-divider">
           <span>其他登录方式</span>
         </div>
+        -->
 
         <div class="login-buttons">
           <!-- 微信登录暂时关闭
@@ -55,7 +57,11 @@
             <span>微信登录</span>
           </button>
           -->
-          <button @click="handleDingTalkLogin" class="login-btn dingtalk">
+          <button
+            v-if="dingtalkEnabled"
+            @click="handleDingTalkLogin"
+            class="login-btn dingtalk"
+          >
             <span>⚙️</span>
             <span>钉钉登录</span>
           </button>
@@ -81,7 +87,11 @@
             <span>微信登录</span>
           </button>
           -->
-          <button @click="handleDingTalkLogin" class="login-btn dingtalk">
+          <button
+            v-if="dingtalkEnabled"
+            @click="handleDingTalkLogin"
+            class="login-btn dingtalk"
+          >
             <span>⚙️</span>
             <span>钉钉登录</span>
           </button>
@@ -96,10 +106,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { authApi } from '@/api'
+import { configApi } from '@/api/config'
 import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 
@@ -111,6 +122,12 @@ const loginMethod = ref<'password' | 'qrcode'>('password')
 const loading = ref(false)
 const errorMessage = ref('')
 const loginFormRef = ref<FormInstance>()
+
+/**
+ * 钉钉登录开关：由 GET /api/v1/auth/login-options 动态拉取。
+ * 默认 false：拉取失败或后端关闭时，登录页不显示钉钉登录入口（保守降级）。
+ */
+const dingtalkEnabled = ref(false)
 
 const loginForm = reactive({
   username: '',
@@ -215,6 +232,25 @@ const handleDingTalkLogin = async () => {
     loading.value = false
   }
 }
+
+/**
+ * 拉取登录页公开开关。失败时保持 dingtalkEnabled=false（按钮不显示）。
+ */
+const loadLoginOptions = async () => {
+  try {
+    const response = await configApi.getLoginOptions()
+    if (response && response.data && response.data.code === 200 && response.data.data) {
+      dingtalkEnabled.value = response.data.data.dingtalkEnabled === true
+    }
+  } catch (error) {
+    // 静默降级：不打扰用户，按钮保持隐藏
+    dingtalkEnabled.value = false
+  }
+}
+
+onMounted(() => {
+  loadLoginOptions()
+})
 
 /**
  * 组件卸载时清理
